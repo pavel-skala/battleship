@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+* {
+    box-sizing: border-box;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+/* background */
+#bg {
+    position: absolute;
+    z-index: -1;
+}
+#bgImg {
+    width: 120%;
+}
+#bgBx {
+    background: linear-gradient(0deg, black, #5454541c, #1e1e1e);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* building ship */
+#buildShip{
+    height: auto;
+}
+#buildGarage {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    position: absolute;
+    left: 500px;
+    top: 100px;
+}
+.shipsInGarage {
+    width:  60px;
+    margin-bottom: 60px;
+    background-color: black;
+}
+.shipsGarageBx{
+    background-color: blue;
+    height: 60px;
+    width: 60px;
+    cursor: grab;
+}
+
+#buildArea{
+    height: auto;
+    width: 662px;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid white;
+    position: absolute;
+    left: 800px;
+    top: 100px;
+    background-color: black;
+}
+#buildAreaRow{
+    width: 660px;
+    height: 60px;
+    display: flex;
+}
+#buildAreaColumn{
+    display: flex;
+    flex-direction: column;
+}
+.buildSquareRow, .buildSquareColumn {
+    width: 60px;
+    height: 60px;
+    user-select: none;
+    border: 1px solid white;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#buildBoard{
+    height: auto;
+    width: auto;
+    display: grid;
+    grid-template-columns: repeat(10, 60px);
+    grid-template-rows: repeat(10, 60px);
+    background-color: black;
+}
+
+/* game */
+#game{
+    display: none;
+    justify-content: space-around;
+    height: auto;
+}
+
+#myArea,
+#enemyArea {
+    height: 500px;
+    width: auto;
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+    border: 1px solid white;
+}
+.mySquare,
+.enemySquare, .buildSquare {
+    user-select: none;
+    border: 1px solid white;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
