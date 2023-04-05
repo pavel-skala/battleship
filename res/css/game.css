@@ -37,7 +37,7 @@ body {
     width: auto;
     height: auto;
     position: absolute;
-    left: 500px;
+    left: 300px;
     top: 100px;
 }
 .shipsInGarage {
@@ -50,6 +50,21 @@ body {
     height: 60px;
     width: 60px;
     cursor: grab;
+}
+
+#saveShipPosition{
+    color: black;
+    font-size: 45px;
+    background-color: white;
+    box-shadow: #000000 1px 0px 9px 0px;
+    cursor: pointer;
+    border: 0;
+    width: 225px;
+    height: 90px;
+    position: absolute;
+    left: 500px;
+    top: 500px;
+    border-radius: 8px;
 }
 
 #buildArea{
@@ -91,6 +106,7 @@ body {
     grid-template-rows: repeat(10, 60px);
     background-color: black;
 }
+
 
 /* game */
 #game{

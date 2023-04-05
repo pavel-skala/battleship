@@ -80,6 +80,9 @@ body {
     width: 225px;
     height: 90px;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     z-index: 3;
 }
