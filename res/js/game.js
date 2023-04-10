@@ -1,7 +1,11 @@
 const buildShip = document.getElementById("buildShip");
 const shipsInGarage = document.getElementsByClassName("shipsInGarage");
 const shipsGarageBx = document.getElementsByClassName("shipsGarageBx");
-const saveShipPosition = document.getElementById("saveShipPosition");
+const saveShipButton = document.getElementById("saveShipButton");
+const buildGarageOverLap = document.getElementById("buildGarageOverLap");
+const saveButtonOverLap = document.getElementById("saveButtonOverLap");
+const buildSquare = document.getElementsByClassName("buildSquare");
+const buildShipContinue = document.getElementById("buildShipContinue");
 
 const game = document.getElementById("game");
 const mySquares = document.getElementsByClassName("mySquare");
@@ -18,123 +22,223 @@ const keycodes = {
     RIGHT: { 39: 1 },
 };
 
-let shipGarageIndex = [];
+let shipSquareIndex = [];
 
 let myAreaIndex = [];
 
 let shipOffSetX = 561;
-let shipOffSetY = 61;
-let shipBxinShip;
+let shipOffSetY = 91;
+let shipBxinShip = [];
 let shipInGaragePosition = [];
 let shipInGaragePositionX = [];
 let shipInGaragePositionY = [];
-
-
+let shipPickedIndex;
+let movingIndex = false;
+let shipFreeSquare = true;
+let savedShipsCount = 0;
 
 for (let i = 0; i < 100; i++) {
-    shipGarageIndex[i] = false;
+    shipSquareIndex[i] = false;
     myAreaIndex[i] = 0;
 }
 
-console.log(myAreaIndex);
+function freeSquareCheck(params) {
+    shipFreeSquare = true;
+        for (
+            let i = shipInGaragePosition[shipPickedIndex];
+            i <
+            shipInGaragePosition[shipPickedIndex] +
+                10 * shipBxinShip[shipPickedIndex];
+            i += 10
+        ) {
+            if (shipSquareIndex[i] === true) {
+                shipFreeSquare = false;
+            }
+        }
+
+        if (shipFreeSquare === false) {
+            saveShipButton.style.backgroundColor = "#eb3939";
+        } else {
+            saveShipButton.style.backgroundColor = "#07d307";
+        }
+}
 
 [...shipsInGarage].forEach((shipInGarage, shipGarageIndex) => {
-    
-    
     shipInGarage.addEventListener("click", shipInGarageClick);
-    
+
     function shipInGarageClick() {
-        console.log("ship index:" + shipGarageIndex);
-        
+        movingIndex = true;
+        shipPickedIndex = shipGarageIndex;
+
         shipInGarage.style.position = "absolute";
         shipInGarage.style.zIndex = "1000";
-        
+
         let i = 0;
-        for ( i ; i < shipGarageIndex.length; i++) {
+        for (i; i < shipGarageIndex.length; i++) {
             if (shipGarageIndex[i] === false) {
                 shipGarageIndex[i] = true;
                 break;
             }
         }
-        shipInGaragePosition[index] = i;
-        shipBxinShip = shipInGarage.getElementsByClassName("shipsGarageBx").length;
+        shipInGaragePosition[shipGarageIndex] = i;
+        shipBxinShip[shipGarageIndex] =
+            shipInGarage.getElementsByClassName("shipsGarageBx").length;
         console.log(shipBxinShip);
-        
-        shipInGaragePositionX[index] = Math.floor(shipInGaragePosition[index]/10);
-        shipInGaragePositionY[index] = (shipInGaragePosition[index]%10);
-        shipInGarage.style.left = `${shipInGaragePositionX[index]*60 + shipOffSetX}px`;
-        shipInGarage.style.top = `${shipInGaragePositionY[index]*60 + shipOffSetY}px`;
 
-        // for ( i ; i < (shipBxinShip)*10; i += 10) {
-        //     shipGarageIndex[i] = true;
-        // }
+        shipInGaragePositionX[shipGarageIndex] = Math.floor(
+            shipInGaragePosition[shipGarageIndex] / 10
+        );
+        shipInGaragePositionY[shipGarageIndex] =
+            shipInGaragePosition[shipGarageIndex] % 10;
+        shipInGarage.style.left = `${
+            shipInGaragePositionX[shipGarageIndex] * 60 + shipOffSetX
+        }px`;
+        shipInGarage.style.top = `${
+            shipInGaragePositionY[shipGarageIndex] * 60 + shipOffSetY
+        }px`;
 
-        shipInGarage.removeEventListener("click", shipInGarageClick)
+        freeSquareCheck();
+
+        shipInGarage.style.cursor = "default";
+        buildGarageOverLap.style.zIndex = "10";
+        saveButtonOverLap.style.zIndex = "0";
+        shipInGarage.removeEventListener("click", shipInGarageClick);
     }
-        
+});
 
-        
-   
-    document.addEventListener("keydown", ({ keyCode }) => {
-        console.log("index : " + index);
-        console.log(shipInGaragePositionX[index]);
-        console.log(shipInGaragePositionY[index]);
-
+document.addEventListener("keydown", ({ keyCode }) => {
+    if (movingIndex === true) {
         if (keycodes.UP[keyCode]) {
-            if (shipInGaragePositionY[index] > 0) {
-                shipInGaragePositionY[index]--;
+            if (shipInGaragePositionY[shipPickedIndex] > 0) {
+                shipInGaragePositionY[shipPickedIndex]--;
             }
-            shipInGarage.style.left = `${shipInGaragePositionX[index]*60 + shipOffSetX}px`;
-            shipInGarage.style.top = `${shipInGaragePositionY[index]*60 + shipOffSetY}px`;
+            shipsInGarage[shipPickedIndex].style.left = `${
+                shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
+            }px`;
+            shipsInGarage[shipPickedIndex].style.top = `${
+                shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
+            }px`;
         }
 
         if (keycodes.DOWN[keyCode]) {
-            if (shipInGaragePositionY[index] <= 9-shipBxinShip) {
-                shipInGaragePositionY[index]++;
+            if (
+                shipInGaragePositionY[shipPickedIndex] <=
+                9 - shipBxinShip[shipPickedIndex]
+            ) {
+                shipInGaragePositionY[shipPickedIndex]++;
             }
-            shipInGarage.style.left = `${shipInGaragePositionX[index]*60 + shipOffSetX}px`;
-            shipInGarage.style.top = `${shipInGaragePositionY[index]*60 + shipOffSetY}px`;
+            shipsInGarage[shipPickedIndex].style.left = `${
+                shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
+            }px`;
+            shipsInGarage[shipPickedIndex].style.top = `${
+                shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
+            }px`;
         }
 
         if (keycodes.LEFT[keyCode]) {
-            if (shipInGaragePositionX[index] > 0) {
-                shipInGaragePositionX[index]--;
+            if (shipInGaragePositionX[shipPickedIndex] > 0) {
+                shipInGaragePositionX[shipPickedIndex]--;
             }
-            shipInGarage.style.left = `${shipInGaragePositionX[index]*60 + shipOffSetX}px`;
-            shipInGarage.style.top = `${shipInGaragePositionY[index]*60 + shipOffSetY}px`;
+            shipsInGarage[shipPickedIndex].style.left = `${
+                shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
+            }px`;
+            shipsInGarage[shipPickedIndex].style.top = `${
+                shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
+            }px`;
         }
 
         if (keycodes.RIGHT[keyCode]) {
-            if (shipInGaragePositionX[index] < 9) {
-                shipInGaragePositionX[index]++;
+            if (shipInGaragePositionX[shipPickedIndex] < 9) {
+                shipInGaragePositionX[shipPickedIndex]++;
             }
-            shipInGarage.style.left = `${shipInGaragePositionX[index]*60 + shipOffSetX}px`;
-            shipInGarage.style.top = `${shipInGaragePositionY[index]*60 + shipOffSetY}px`;
-        }
-    });
-
-    saveShipPosition.onclick = () => {
-
-        shipInGaragePosition[index] = shipInGaragePositionY[index]*10 + shipInGaragePositionX[index];
-        console.log("index" + index);
-        console.log(shipInGaragePositionX[index]);
-        console.log(shipInGaragePositionY[index]);
-        console.log(shipInGaragePosition[index]);
-        for (let i = shipInGaragePosition[index]; i < shipBxinShip*10; i += 10) {
-            myAreaIndex[i] = 1;
-            console.log(i);
+            shipsInGarage[shipPickedIndex].style.left = `${
+                shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
+            }px`;
+            shipsInGarage[shipPickedIndex].style.top = `${
+                shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
+            }px`;
         }
 
-        console.log(myAreaIndex);
+        shipInGaragePosition[shipPickedIndex] =
+            shipInGaragePositionY[shipPickedIndex] * 10 +
+            shipInGaragePositionX[shipPickedIndex];
+
+        freeSquareCheck();
     }
-//     shipInGarage.addEventListener("mouseup", (e) => {
-//         if (e.pageX > 900 && e.pageX < 1352 && e.pageY > 100 && e.pageY < 550) {
-//         } else {
-//             shipInGarage.style.position = "static";
-//         }
-//     });
 });
 
+saveShipButton.onclick = () => {
+    if (shipFreeSquare === false) {
+        saveShipButton.className = "saveShipAnimation";
+        setTimeout(() => {
+            saveShipButton.className = "idk";
+        }, 1000);
+    } else {
+        shipInGaragePosition[shipPickedIndex] =
+            shipInGaragePositionY[shipPickedIndex] * 10 +
+            shipInGaragePositionX[shipPickedIndex];
+
+        //save the position
+        let savePosition = shipInGaragePosition[shipPickedIndex];
+
+        for (let i = 0; i < shipBxinShip[shipPickedIndex]; i++) {
+            myAreaIndex[savePosition] = 1;
+            savePosition += 10;
+        }
+
+        movingIndex = false;
+
+        if (shipInGaragePositionX[shipPickedIndex] == 0) {
+            savePosition = shipInGaragePosition[shipPickedIndex] - 10;
+            for (let i = 0; i < shipBxinShip[shipPickedIndex] + 2; i++) {
+                for (let j = 0; j < 2; j++) {
+                    shipSquareIndex[savePosition] = true;
+                    savePosition++;
+                }
+                savePosition += 8;
+            }
+        } else if (shipInGaragePositionX[shipPickedIndex] == 9) {
+            savePosition = shipInGaragePosition[shipPickedIndex] - 11;
+            for (let i = 0; i < shipBxinShip[shipPickedIndex] + 2; i++) {
+                for (let j = 0; j < 2; j++) {
+                    shipSquareIndex[savePosition] = true;
+                    savePosition++;
+                }
+                savePosition += 8;
+            }
+        } else {
+            savePosition = shipInGaragePosition[shipPickedIndex] - 11;
+            for (let i = 0; i < shipBxinShip[shipPickedIndex] + 2; i++) {
+                for (let j = 0; j < 3; j++) {
+                    shipSquareIndex[savePosition] = true;
+                    savePosition++;
+                }
+                savePosition += 7;
+            }
+        }
+
+        for (let i = 0; i < 100; i++) {
+            if (shipSquareIndex[i] === true) {
+                buildSquare[i].style.backgroundColor = "rgb(209 55 55)";
+            }
+        }
+
+        saveShipButton.style.backgroundColor = "white";
+        buildGarageOverLap.style.zIndex = "0";
+        savedShipsCount ++;
+        saveButtonOverLap.style.zIndex = "10";
+
+        if (savedShipsCount == shipsInGarage.length){
+            buildShipContinue.style.display = "block";
+        }
+    }
+};
+
+
+buildShipContinue.onclick = () => {
+    buildShip.style.animation = "slideBuildShip 1s forwards";
+    game.style.animation = "slideGame 1s forwards";
+}
 
 
 [...enemySquares].forEach((enemySquare) => {

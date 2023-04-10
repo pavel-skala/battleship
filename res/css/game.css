@@ -31,6 +31,23 @@ body {
 #buildShip{
     height: auto;
 }
+#buildShip h1 {
+    display: flex;
+    justify-content: center;
+    font-size: 65px;
+    position: absolute;
+    left: 40%;
+    margin: 0;
+    top: 15px;
+}
+#buildGarageOverLap {
+    height: 100vh;
+    width: 100px;
+    background-color: transparent;
+    position: absolute;
+    left: 280px;
+    z-index: 0;
+}
 #buildGarage {
     display: flex;
     flex-direction: column;
@@ -44,17 +61,17 @@ body {
     width:  60px;
     margin-bottom: 60px;
     background-color: black;
+    cursor: pointer;
 }
 .shipsGarageBx{
     background-color: blue;
     height: 60px;
     width: 60px;
-    cursor: grab;
 }
 
-#saveShipPosition{
+#saveShipButton{
     color: black;
-    font-size: 45px;
+    font-size: 50px;
     background-color: white;
     box-shadow: #000000 1px 0px 9px 0px;
     cursor: pointer;
@@ -66,6 +83,61 @@ body {
     top: 500px;
     border-radius: 8px;
 }
+.saveShipAnimation{
+    animation: saveShipButtonAnimation 1s ease  1 forwards;
+}
+#saveButtonOverLap{
+    width: 250px;
+    height: 100px;
+    position: absolute;
+    left: 500px;
+    top: 500px;
+    background-color: transparent;
+    z-index: 0;
+}
+#buildShipContinue{
+    display: none;
+    color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);
+    font-size: 42px;
+    box-shadow: #000000 1px 0px 9px 0px;
+    cursor: pointer;
+    border: 0;
+    width: 225px;
+    height: 90px;
+    position: absolute;
+    left: 500px;
+    top: 650px;
+    border-radius: 8px;
+}
+@keyframes saveShipButtonAnimation {
+    0% {
+        box-shadow: #000000 1px 0px 9px 0px;
+    }
+    50%{
+        box-shadow: red 1px 0px 20px 20px;
+    }
+    100%{
+        box-shadow: #000000 1px 0px 9px 0px;
+    }
+}
+@keyframes slideBuildShip {
+    0% {
+        transform: translateX(0)
+    }
+    100% {
+        transform: translateX(-100%)
+    }
+}
+
+@keyframes slideGame {
+    0% {
+        transform: translateX(100%)
+    }
+    100% {
+        transform: translateX(0)
+    }
+}
 
 #buildArea{
     height: auto;
@@ -75,7 +147,7 @@ body {
     border: 1px solid white;
     position: absolute;
     left: 800px;
-    top: 100px;
+    top: 130px;
     background-color: black;
 }
 #buildAreaRow{
@@ -110,9 +182,10 @@ body {
 
 /* game */
 #game{
-    display: none;
+    display: flex;
     justify-content: space-around;
     height: auto;
+    transform: translateX(100%);
 }
 
 #myArea,
@@ -126,10 +199,5 @@ body {
 }
 .mySquare,
 .enemySquare, .buildSquare {
-    user-select: none;
     border: 1px solid white;
-    font-size: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
