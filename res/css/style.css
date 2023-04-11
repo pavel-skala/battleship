@@ -35,39 +35,12 @@ body {
 }
 #startMenu h1 {
     font-size: 115px;
-    
-}
-#startMenu h1:hover{
-    background-image: linear-gradient(
-        90deg,
-        #2d00f7,
-        #c200f7,
-        #ec7d10,
-        #30f2f2,
-        #7cb518
-    );
-    background-size: 100%;
-    background-repeat: repeat;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent; 
-    animation: headerAnimation 500ms linear infinite;
+    user-select: none;
 }
 #startMenu > div {
     display: flex;
     width: 100%;
     justify-content: space-evenly;
-}
-.buttonBx {
-    height: 100px;
-    width: 235px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
 }
 #playGameMenu,
 #startTutorial {
@@ -83,30 +56,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
     z-index: 3;
-}
-#playGameMenu:hover,
-#startTutorial:hover{
-    background-color: #000000;
-}
-.spinBx {
-    background: linear-gradient(
-        90deg,
-        #2d00f7,
-        #c200f7,
-        #ec7d10,
-        #30f2f2,
-        #7cb518
-    );
-    display: none;
-    position: absolute;
-    height: 260px;
-    width: 260px;
-    scale: 1.75;
-    z-index: 2;
-
-    animation: spin 500ms linear infinite;
+    overflow: hidden;
 }
 
 a{
@@ -114,21 +65,5 @@ a{
 }
 
 
-@keyframes spin {
-    from {
-        rotate: 0deg;
-    }
-    to {
-        rotate: 360deg;
-    }
-}
-@keyframes headerAnimation {
-    from {
-        background-position: 0px;
-    }
-    to {
-        background-position: 556px;
-    }
-}
 
 
