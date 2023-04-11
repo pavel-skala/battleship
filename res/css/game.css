@@ -62,11 +62,18 @@ body {
     margin-bottom: 60px;
     background-color: black;
     cursor: pointer;
+    position: relative;
 }
 .shipsGarageBx{
     background-color: blue;
     height: 60px;
     width: 60px;
+}
+.shipInGarageImg{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
 }
 
 #saveShipButton{

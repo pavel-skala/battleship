@@ -4,6 +4,7 @@ const shipsGarageBx = document.getElementsByClassName("shipsGarageBx");
 const saveShipButton = document.getElementById("saveShipButton");
 const buildGarageOverLap = document.getElementById("buildGarageOverLap");
 const saveButtonOverLap = document.getElementById("saveButtonOverLap");
+const rotateShipButton = document.getElementById("rotateShipButton");
 const buildSquare = document.getElementsByClassName("buildSquare");
 const buildShipContinue = document.getElementById("buildShipContinue");
 
@@ -34,6 +35,7 @@ let shipInGaragePositionX = [];
 let shipInGaragePositionY = [];
 let shipPickedIndex;
 let movingIndex = false;
+let rotateIndex = false;
 let shipFreeSquare = true;
 let savedShipsCount = 0;
 
@@ -42,7 +44,7 @@ for (let i = 0; i < 100; i++) {
     myAreaIndex[i] = 0;
 }
 
-function freeSquareCheck(params) {
+function freeSquareCheck() {
     shipFreeSquare = true;
         for (
             let i = shipInGaragePosition[shipPickedIndex];
@@ -69,6 +71,10 @@ function freeSquareCheck(params) {
     function shipInGarageClick() {
         movingIndex = true;
         shipPickedIndex = shipGarageIndex;
+
+        rotateIndex = false
+        shipOffSetX = 561;
+        shipOffSetY = 91;
 
         shipInGarage.style.position = "absolute";
         shipInGarage.style.zIndex = "1000";
@@ -107,6 +113,7 @@ function freeSquareCheck(params) {
 });
 
 document.addEventListener("keydown", ({ keyCode }) => {
+    
     if (movingIndex === true) {
         if (keycodes.UP[keyCode]) {
             if (shipInGaragePositionY[shipPickedIndex] > 0) {
@@ -121,6 +128,8 @@ document.addEventListener("keydown", ({ keyCode }) => {
         }
 
         if (keycodes.DOWN[keyCode]) {
+            if (rotateIndex === false) {
+                
             if (
                 shipInGaragePositionY[shipPickedIndex] <=
                 9 - shipBxinShip[shipPickedIndex]
@@ -133,6 +142,21 @@ document.addEventListener("keydown", ({ keyCode }) => {
             shipsInGarage[shipPickedIndex].style.top = `${
                 shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
             }px`;
+        }
+        else{
+            if (
+                shipInGaragePositionY[shipPickedIndex] <=
+                8
+            ) {
+                shipInGaragePositionY[shipPickedIndex]++;
+            }
+            shipsInGarage[shipPickedIndex].style.left = `${
+                shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
+            }px`;
+            shipsInGarage[shipPickedIndex].style.top = `${
+                shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
+            }px`;
+        }
         }
 
         if (keycodes.LEFT[keyCode]) {
@@ -148,15 +172,29 @@ document.addEventListener("keydown", ({ keyCode }) => {
         }
 
         if (keycodes.RIGHT[keyCode]) {
-            if (shipInGaragePositionX[shipPickedIndex] < 9) {
-                shipInGaragePositionX[shipPickedIndex]++;
+            if (rotateIndex === false) {
+                if (shipInGaragePositionX[shipPickedIndex] < 9) {
+                    shipInGaragePositionX[shipPickedIndex]++;
+                }
+                shipsInGarage[shipPickedIndex].style.left = `${
+                    shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
+                }px`;
+                shipsInGarage[shipPickedIndex].style.top = `${
+                    shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
+                }px`;
             }
-            shipsInGarage[shipPickedIndex].style.left = `${
-                shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
-            }px`;
-            shipsInGarage[shipPickedIndex].style.top = `${
-                shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
-            }px`;
+            else{
+                if (shipInGaragePositionX[shipPickedIndex] < 10 - shipBxinShip[shipPickedIndex]) {
+                    shipInGaragePositionX[shipPickedIndex]++;
+                }
+                shipsInGarage[shipPickedIndex].style.left = `${
+                    shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
+                }px`;
+                shipsInGarage[shipPickedIndex].style.top = `${
+                    shipInGaragePositionY[shipPickedIndex] * 60 + shipOffSetY
+                }px`;
+            }
+            
         }
 
         shipInGaragePosition[shipPickedIndex] =
@@ -165,13 +203,37 @@ document.addEventListener("keydown", ({ keyCode }) => {
 
         freeSquareCheck();
     }
+    console.log(shipInGaragePosition[shipPickedIndex]);
 });
+
+
+rotateShipButton.onclick = () => {
+    shipInGaragePosition[shipPickedIndex] =
+            shipInGaragePositionY[shipPickedIndex] * 10 +
+            shipInGaragePositionX[shipPickedIndex];
+    if (shipBxinShip[shipPickedIndex]%2 == 0) {
+        shipsInGarage[shipPickedIndex].style.transformOrigin = "left";
+    }
+    if (rotateIndex === false) {
+        rotateIndex = true;
+        shipsInGarage[shipPickedIndex].style.rotate = "-90deg";
+        shipOffSetX = 681;
+        shipOffSetY = 31;
+        console.log(shipInGaragePosition[shipPickedIndex]);
+    }
+    else {
+        rotateIndex = false;
+        shipsInGarage[shipPickedIndex].style.rotate = "0deg";
+        shipOffSetX = 561;
+        shipOffSetY = 91;
+    }
+}
 
 saveShipButton.onclick = () => {
     if (shipFreeSquare === false) {
         saveShipButton.className = "saveShipAnimation";
         setTimeout(() => {
-            saveShipButton.className = "idk";
+            saveShipButton.classList.remove("saveShipAnimation");
         }, 1000);
     } else {
         shipInGaragePosition[shipPickedIndex] =
