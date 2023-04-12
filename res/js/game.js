@@ -2,17 +2,22 @@ const buildShip = document.getElementById("buildShip");
 const shipsInGarage = document.getElementsByClassName("shipsInGarage");
 const shipsGarageBx = document.getElementsByClassName("shipsGarageBx");
 const saveShipButton = document.getElementById("saveShipButton");
+
+const arrowUp = document.getElementById("arrowUp");
+const arrowLeft = document.getElementById("arrowLeft");
+const arrowRight = document.getElementById("arrowRight");
+const arrowDown = document.getElementById("arrowDown");
+
 const buildGarageOverLap = document.getElementById("buildGarageOverLap");
 const saveButtonOverLap = document.getElementById("saveButtonOverLap");
 const rotateButtonOverLap = document.getElementById("rotateButtonOverLap");
 const rotateShipButton = document.getElementById("rotateShipButton");
 const buildBoard = document.getElementById("buildBoard");
-// const buildSquare = document.getElementsByClassName("buildSquare");
 const buildShipContinue = document.getElementById("buildShipContinue");
 
 const game = document.getElementById("game");
-const mySquares = document.getElementsByClassName("mySquare");
-const enemySquares = document.getElementsByClassName("enemySquare");
+const myBoard = document.getElementById("myBoard");
+const enemyBoard = document.getElementById("enemyBoard");
 
 const keycodes = {
     //up
@@ -42,27 +47,50 @@ let shipFreeSquare = true;
 let savedShipsCount = 0;
 
 let buildSquare = [];
+let mySquares = [];
+let enemySquares = [];
 
 for (let i = 0; i < 100; i++) {
     shipSquareIndex[i] = false;
     myAreaIndex[i] = 0;
 
+    //placing ships
     buildSquare[i] = document.createElement("div");
     buildSquare[i].classList.add("buildSquare");
     buildBoard.appendChild(buildSquare[i]);
+
+    //my area
+    mySquares[i] = document.createElement("div");
+    mySquares[i].classList.add("mySquare");
+    myBoard.appendChild(mySquares[i]);
+
+    //enemy area
+    enemySquares[i] = document.createElement("div");
+    enemySquares[i].classList.add("enemySquare");
+    enemyBoard.appendChild(enemySquares[i]);
 }
 
 function freeSquareCheck() {
     shipFreeSquare = true;
-    for (
-        let i = shipInGaragePosition[shipPickedIndex];
-        i <
-        shipInGaragePosition[shipPickedIndex] +
-            10 * shipBxinShip[shipPickedIndex];
-        i += 10
-    ) {
-        if (shipSquareIndex[i] === true) {
-            shipFreeSquare = false;
+    if (rotateIndex === false) {
+        
+        for (
+            let i = shipInGaragePosition[shipPickedIndex];
+            i <
+            shipInGaragePosition[shipPickedIndex] +
+                10 * shipBxinShip[shipPickedIndex];
+            i += 10
+        ) {
+            if (shipSquareIndex[i] === true) {
+                shipFreeSquare = false;
+            }
+        }
+    }
+    else {
+        for (let i = shipInGaragePosition[shipPickedIndex]; i < shipInGaragePosition[shipPickedIndex] + shipBxinShip[shipPickedIndex]; i++) {
+            if (shipSquareIndex[i] === true) {
+                shipFreeSquare = false
+            }
         }
     }
 
@@ -134,54 +162,71 @@ function shipPositionCalc() {
     }
 });
 
+function goUpFunction() {
+    if (shipInGaragePositionY[shipPickedIndex] > 0) {
+        shipInGaragePositionY[shipPickedIndex]--;
+    }
+    shipPlacingWithPx();
+}
+
+function goDownFunction() {
+    if (rotateIndex === false) {
+        if (
+            shipInGaragePositionY[shipPickedIndex] <=
+            9 - shipBxinShip[shipPickedIndex]
+        ) {
+            shipInGaragePositionY[shipPickedIndex]++;
+        }
+        shipPlacingWithPx();
+    } else {
+        if (shipInGaragePositionY[shipPickedIndex] <= 8) {
+            shipInGaragePositionY[shipPickedIndex]++;
+        }
+        shipPlacingWithPx();
+    }
+}
+
+function goLeftFunction() {
+    if (shipInGaragePositionX[shipPickedIndex] > 0) {
+        shipInGaragePositionX[shipPickedIndex]--;
+    }
+    shipPlacingWithPx();
+}
+
+function goRightFunction() {
+    if (rotateIndex === false) {
+        if (shipInGaragePositionX[shipPickedIndex] < 9) {
+            shipInGaragePositionX[shipPickedIndex]++;
+        }
+        shipPlacingWithPx();
+    } else {
+        if (
+            shipInGaragePositionX[shipPickedIndex] <
+            10 - shipBxinShip[shipPickedIndex]
+        ) {
+            shipInGaragePositionX[shipPickedIndex]++;
+        }
+        shipPlacingWithPx();
+    }
+}
+
+
 document.addEventListener("keydown", ({ keyCode }) => {
     if (movingIndex === true) {
         if (keycodes.UP[keyCode]) {
-            if (shipInGaragePositionY[shipPickedIndex] > 0) {
-                shipInGaragePositionY[shipPickedIndex]--;
-            }
-            shipPlacingWithPx();
+            goUpFunction();
         }
 
         if (keycodes.DOWN[keyCode]) {
-            if (rotateIndex === false) {
-                if (
-                    shipInGaragePositionY[shipPickedIndex] <=
-                    9 - shipBxinShip[shipPickedIndex]
-                ) {
-                    shipInGaragePositionY[shipPickedIndex]++;
-                }
-                shipPlacingWithPx();
-            } else {
-                if (shipInGaragePositionY[shipPickedIndex] <= 8) {
-                    shipInGaragePositionY[shipPickedIndex]++;
-                }
-                shipPlacingWithPx();
-            }
+            goDownFunction();
         }
 
         if (keycodes.LEFT[keyCode]) {
-            if (shipInGaragePositionX[shipPickedIndex] > 0) {
-                shipInGaragePositionX[shipPickedIndex]--;
-            }
-            shipPlacingWithPx();
+            goLeftFunction();
         }
 
         if (keycodes.RIGHT[keyCode]) {
-            if (rotateIndex === false) {
-                if (shipInGaragePositionX[shipPickedIndex] < 9) {
-                    shipInGaragePositionX[shipPickedIndex]++;
-                }
-                shipPlacingWithPx();
-            } else {
-                if (
-                    shipInGaragePositionX[shipPickedIndex] <
-                    10 - shipBxinShip[shipPickedIndex]
-                ) {
-                    shipInGaragePositionX[shipPickedIndex]++;
-                }
-                shipPlacingWithPx();
-            }
+            goRightFunction();
         }
 
         shipPositionCalc();
@@ -190,6 +235,45 @@ document.addEventListener("keydown", ({ keyCode }) => {
     }
 });
 
+arrowUp.onclick = () => {
+    if (movingIndex === true) {
+        goUpFunction();
+
+        shipPositionCalc();
+
+        freeSquareCheck();
+    }
+}
+
+arrowDown.onclick = () => {
+    if (movingIndex === true) {
+        goDownFunction();
+
+        shipPositionCalc();
+
+        freeSquareCheck();
+    }
+}
+
+arrowLeft.onclick = () => {
+    if (movingIndex === true) {
+        goLeftFunction();
+
+        shipPositionCalc();
+
+        freeSquareCheck();
+    }
+}
+
+arrowRight.onclick = () => {
+    if (movingIndex === true) {
+        goRightFunction();
+
+        shipPositionCalc();
+
+        freeSquareCheck();
+    }
+}
 
 rotateShipButton.onclick = () => {
         shipPositionCalc();
@@ -216,6 +300,7 @@ rotateShipButton.onclick = () => {
         }
         shipPlacingWithPx();
 
+        freeSquareCheck();
 };
 
 
@@ -332,6 +417,13 @@ saveShipButton.onclick = () => {
 buildShipContinue.onclick = () => {
     buildShip.style.animation = "slideBuildShip 1s forwards";
     game.style.animation = "slideGame 1s forwards";
+
+
+    // for (let i = 0; i < 100; i++) {
+    //     if (myAreaIndex[i] == 1) {
+    //         mySquares[i].style.backgroundColor = "blue";
+    //     }
+    // }
 };
 
 [...enemySquares].forEach((enemySquare) => {
