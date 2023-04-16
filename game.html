@@ -14,6 +14,14 @@
             <div id="bgBx"></div>
         </div>
 
+        <!-- enter nickname -->
+        <section id="nicknameSection">
+            <h1>Enter Your Nickname</h1>
+            <p id="nicknameCondition"></p>
+            <input type="text" name="enterNickname" id="enterNickname" spellcheck="false">
+            <button id="submitNicknameBtn">Submit</button>
+        </section>
+
         <!-- building ship -->
         <section id="buildShip">
             <h1>Place your ships</h1>
@@ -118,6 +126,21 @@
             <div class="myShips">
                 <div class="myShipsBx"></div>
             </div>
+            <div id="playersTurn">
+                <div id="myIcon">
+                    <img src="./res/img/player.png" alt="" class="iconImg" draggable="false">
+                    <div id="myIconName" class="iconName">Me</div>
+                </div>
+                <div id="playersTurnArrowBx">
+                    <img src="./res/img/arrow2.png" alt="" id="playersTurnArrow" draggable="false">
+                </div>
+                <div id="enemyIcon">
+                    <img src="./res/img/computer.png" alt="" class="iconImg" draggable="false">
+                    <div class="iconName">Computer</div>
+                </div>
+            </div>
+            <h2 id="myBoardTitle">Your Board</h2>
+            <h2>Enemy Board</h2>
             <div id="myArea">
                 <div id="myAreaRow">
                     <div class="mySquareRow"></div>

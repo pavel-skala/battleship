@@ -1,23 +1,35 @@
+const nicknameSection = document.getElementById("nicknameSection");
+const enterNickname = document.getElementById("enterNickname");
+const submitNicknameBtn = document.getElementById("submitNicknameBtn");
+const nicknameCondition = document.getElementById("nicknameCondition");
+
 const buildShip = document.getElementById("buildShip");
 const shipsInGarage = document.getElementsByClassName("shipsInGarage");
 const shipsGarageBx = document.getElementsByClassName("shipsGarageBx");
-const saveShipButton = document.getElementById("saveShipButton");
+const buildGarageOverLap = document.getElementById("buildGarageOverLap");
+const buildBoard = document.getElementById("buildBoard");
 
 const arrowUp = document.getElementById("arrowUp");
 const arrowLeft = document.getElementById("arrowLeft");
 const arrowRight = document.getElementById("arrowRight");
 const arrowDown = document.getElementById("arrowDown");
 
-const buildGarageOverLap = document.getElementById("buildGarageOverLap");
+const saveShipButton = document.getElementById("saveShipButton");
 const saveButtonOverLap = document.getElementById("saveButtonOverLap");
-const rotateButtonOverLap = document.getElementById("rotateButtonOverLap");
+
 const rotateShipButton = document.getElementById("rotateShipButton");
-const buildBoard = document.getElementById("buildBoard");
+const rotateButtonOverLap = document.getElementById("rotateButtonOverLap");
+
 const buildShipContinue = document.getElementById("buildShipContinue");
 
 const game = document.getElementById("game");
+const playersTurnArrow = document.getElementById("playersTurnArrow");
+const myIconName = document.getElementById("myIconName");
+
 const myBoard = document.getElementById("myBoard");
+const myBoardTitle = document.getElementById("myBoardTitle");
 const enemyBoard = document.getElementById("enemyBoard");
+const myShips = document.getElementsByClassName("myShips");
 
 const keycodes = {
     //up
@@ -30,19 +42,22 @@ const keycodes = {
     RIGHT: { 39: 1 },
 };
 
+let userNickname;
+
 let shipSquareIndex = [];
 
 let myAreaIndex = [];
 
 let shipOffSetX = 561;
 let shipOffSetY = 91;
+
 let shipBxinShip = [];
 let shipInGaragePosition = [];
 let shipInGaragePositionX = [];
 let shipInGaragePositionY = [];
 let shipPickedIndex;
 let movingIndex = false;
-let rotateIndex = false;
+let rotateIndex = [];
 let shipFreeSquare = true;
 let savedShipsCount = 0;
 
@@ -54,7 +69,7 @@ for (let i = 0; i < 100; i++) {
     shipSquareIndex[i] = false;
     myAreaIndex[i] = 0;
 
-    //placing ships
+    //creating squares
     buildSquare[i] = document.createElement("div");
     buildSquare[i].classList.add("buildSquare");
     buildBoard.appendChild(buildSquare[i]);
@@ -70,9 +85,35 @@ for (let i = 0; i < 100; i++) {
     enemyBoard.appendChild(enemySquares[i]);
 }
 
+
+//nickname section
+submitNicknameBtn.onclick = () => {
+    userNickname = enterNickname.value;
+    if (userNickname.length > 2) {
+        buildShip.style.scale = "1";
+        buildShip.style.top = "0";
+        nicknameSection.style.scale = "20";
+        nicknameSection.style.opacity = "0";
+
+        setTimeout(() => {
+            nicknameSection.style.display = "none";
+        }, 3000);
+    }
+    else if (userNickname.length == 0) {
+        nicknameCondition.innerHTML = "Please enter a nickname";
+        enterNickname.style.marginTop = "0";
+    }
+    else {
+        nicknameCondition.innerHTML = "Nickname must have at least three characters";
+        enterNickname.style.marginTop = "0";
+    }
+}
+
+
+//checking if square is free
 function freeSquareCheck() {
     shipFreeSquare = true;
-    if (rotateIndex === false) {
+    if (rotateIndex[shipPickedIndex] === false) {
         
         for (
             let i = shipInGaragePosition[shipPickedIndex];
@@ -101,6 +142,7 @@ function freeSquareCheck() {
     }
 }
 
+//placing ships
 function shipPlacingWithPx() {
     shipsInGarage[shipPickedIndex].style.left = `${
         shipInGaragePositionX[shipPickedIndex] * 60 + shipOffSetX
@@ -110,6 +152,7 @@ function shipPlacingWithPx() {
     }px`;
 }
 
+//position calculation
 function shipPositionCalc() {
     shipInGaragePosition[shipPickedIndex] =
         shipInGaragePositionY[shipPickedIndex] * 10 +
@@ -123,7 +166,7 @@ function shipPositionCalc() {
         movingIndex = true;
         shipPickedIndex = shipGarageIndex;
 
-        rotateIndex = false;
+        rotateIndex[shipPickedIndex] = false;
 
         shipInGarage.style.position = "absolute";
         shipInGarage.style.zIndex = "1000";
@@ -162,6 +205,7 @@ function shipPositionCalc() {
     }
 });
 
+//move up
 function goUpFunction() {
     if (shipInGaragePositionY[shipPickedIndex] > 0) {
         shipInGaragePositionY[shipPickedIndex]--;
@@ -169,8 +213,9 @@ function goUpFunction() {
     shipPlacingWithPx();
 }
 
+//move down
 function goDownFunction() {
-    if (rotateIndex === false) {
+    if (rotateIndex[shipPickedIndex] === false) {
         if (
             shipInGaragePositionY[shipPickedIndex] <=
             9 - shipBxinShip[shipPickedIndex]
@@ -186,6 +231,7 @@ function goDownFunction() {
     }
 }
 
+//move left
 function goLeftFunction() {
     if (shipInGaragePositionX[shipPickedIndex] > 0) {
         shipInGaragePositionX[shipPickedIndex]--;
@@ -193,8 +239,9 @@ function goLeftFunction() {
     shipPlacingWithPx();
 }
 
+//move right
 function goRightFunction() {
-    if (rotateIndex === false) {
+    if (rotateIndex[shipPickedIndex] === false) {
         if (shipInGaragePositionX[shipPickedIndex] < 9) {
             shipInGaragePositionX[shipPickedIndex]++;
         }
@@ -210,7 +257,7 @@ function goRightFunction() {
     }
 }
 
-
+//pressing arrow keys
 document.addEventListener("keydown", ({ keyCode }) => {
     if (movingIndex === true) {
         if (keycodes.UP[keyCode]) {
@@ -235,6 +282,7 @@ document.addEventListener("keydown", ({ keyCode }) => {
     }
 });
 
+//arrow  clicking
 arrowUp.onclick = () => {
     if (movingIndex === true) {
         goUpFunction();
@@ -244,7 +292,6 @@ arrowUp.onclick = () => {
         freeSquareCheck();
     }
 }
-
 arrowDown.onclick = () => {
     if (movingIndex === true) {
         goDownFunction();
@@ -254,7 +301,6 @@ arrowDown.onclick = () => {
         freeSquareCheck();
     }
 }
-
 arrowLeft.onclick = () => {
     if (movingIndex === true) {
         goLeftFunction();
@@ -264,7 +310,6 @@ arrowLeft.onclick = () => {
         freeSquareCheck();
     }
 }
-
 arrowRight.onclick = () => {
     if (movingIndex === true) {
         goRightFunction();
@@ -275,13 +320,14 @@ arrowRight.onclick = () => {
     }
 }
 
+//rotate button clicking
 rotateShipButton.onclick = () => {
         shipPositionCalc();
         shipsInGarage[shipPickedIndex].style.transformOrigin = "30px 30px";
         if (shipBxinShip[shipPickedIndex] % 2 == 0) {
         }
-        if (rotateIndex === false) {
-            rotateIndex = true;
+        if (rotateIndex[shipPickedIndex] === false) {
+            rotateIndex[shipPickedIndex] = true;
             shipsInGarage[shipPickedIndex].style.rotate = "-90deg";
 
             if (shipInGaragePositionX[shipPickedIndex] > 6) {
@@ -290,7 +336,7 @@ rotateShipButton.onclick = () => {
             }
 
         } else {
-            rotateIndex = false;
+            rotateIndex[shipPickedIndex] = false;
             shipsInGarage[shipPickedIndex].style.rotate = "0deg";
 
             if (shipInGaragePositionY[shipPickedIndex] > 6) {
@@ -303,7 +349,7 @@ rotateShipButton.onclick = () => {
         freeSquareCheck();
 };
 
-
+//save button clicking
 saveShipButton.onclick = () => {
     if (shipFreeSquare === false) {
         saveShipButton.className = "saveShipAnimation";
@@ -316,7 +362,7 @@ saveShipButton.onclick = () => {
         movingIndex = false;
         let savePosition = shipInGaragePosition[shipPickedIndex];
 
-        if (rotateIndex === false) {
+        if (rotateIndex[shipPickedIndex] === false) {
             //save the position
             for (let i = 0; i < shipBxinShip[shipPickedIndex]; i++) {
                 myAreaIndex[savePosition] = 1;
@@ -414,20 +460,43 @@ saveShipButton.onclick = () => {
     }
 };
 
+//continue button clicking
 buildShipContinue.onclick = () => {
-    buildShip.style.animation = "slideBuildShip 1s forwards";
-    game.style.animation = "slideGame 1s forwards";
+    buildShip.style.scale = "20";
+    buildShip.style.top = "-50%";
+    buildShip.style.opacity = "0";
+    buildShip.style.transition = "2s scale, 2s top, 2s opacity";
+    game.style.scale = "1";
+    game.style.top = "0";
+    
+    myBoardTitle.innerText = `${userNickname}'s Board`;
+    myIconName.innerText = `${userNickname}`;
+
+    //place my ships on my area
+    shipOffSetX = 211;
+    shipOffSetY = 271;
+
+    for (let i = 0; i < shipsInGarage.length; i++) {
+
+        myShips[i].style.left = `${
+            shipInGaragePositionX[i] * 60 + shipOffSetX
+        }px`;
+        myShips[i].style.top = `${
+            shipInGaragePositionY[i] * 60 + shipOffSetY
+        }px`;
+
+        if (rotateIndex[i] === true) {
+            myShips[i].style.rotate = "-90deg";
+        }
+    }
+    
+    
+}
 
 
-    // for (let i = 0; i < 100; i++) {
-    //     if (myAreaIndex[i] == 1) {
-    //         mySquares[i].style.backgroundColor = "blue";
-    //     }
-    // }
-};
 
-[...enemySquares].forEach((enemySquare) => {
-    enemySquare.onclick = () => {
-        enemySquare.style.backgroundColor = "red";
-    };
-});
+// [...enemySquares].forEach((enemySquare) => {
+//     enemySquare.onclick = () => {
+//         enemySquare.style.backgroundColor = "red";
+//     };
+// });

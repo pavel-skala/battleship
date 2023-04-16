@@ -58,12 +58,12 @@ body {
     align-items: center;
     z-index: 3;
     overflow: hidden;
-    transition: scale 20s ease-in-out;
+    transition: scale 2s ease-in-out;
 }
 
 #playGameMenu:hover,
 #startTutorial:hover{
-    scale: 50;
+    scale: 4;
 }
 
 a{
