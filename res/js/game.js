@@ -42,6 +42,8 @@ const keycodes = {
     RIGHT: { 39: 1 },
 };
 
+const shipLenght = [4, 3, 2, 2, 1];
+
 let userNickname;
 
 let shipSquareIndex = [];
@@ -65,6 +67,8 @@ let buildSquare = [];
 let mySquares = [];
 let enemySquares = [];
 
+let enemySquareFree = [];
+
 for (let i = 0; i < 100; i++) {
     shipSquareIndex[i] = false;
     myAreaIndex[i] = 0;
@@ -83,6 +87,8 @@ for (let i = 0; i < 100; i++) {
     enemySquares[i] = document.createElement("div");
     enemySquares[i].classList.add("enemySquare");
     enemyBoard.appendChild(enemySquares[i]);
+
+    enemySquareFree[i] = true;
 }
 
 
@@ -493,10 +499,55 @@ buildShipContinue.onclick = () => {
     
 }
 
+//gameplay
+let enemySquareIndex;
+
+let enemyShips = [];
+let enemyShipRotate = [];
+let enemyShipPosition = [];
+let enemyShipPositionX = [];
+let enemyShipPositionY = [];
 
 
-// [...enemySquares].forEach((enemySquare) => {
-//     enemySquare.onclick = () => {
-//         enemySquare.style.backgroundColor = "red";
-//     };
-// });
+
+for (let i = 0; i < 5; i++) {
+    enemyShipRotate[i] = Math.floor(Math.random() * 2);
+
+    //not rotated
+    if (enemyShipRotate[i] === 0) {
+        enemyShipPositionX[i] = Math.floor(Math.random() * 10);        
+        enemyShipPositionY[i] = Math.floor(Math.random() * (10 - shipLenght[i] + 1));
+        enemyShipPosition[i] = enemyShipPositionY[i] * 10 + enemyShipPositionX[i];    
+        
+        let enemySquareFreeCheck = false;
+        for (let j = enemyShipPosition[i]; j < enemyShipPosition[i] + 40; j += 10) {
+            if (enemySquareFree[i] === false) {
+                enemySquareFreeCheck = true;
+            }
+        }
+        if (enemySquareFreeCheck === false) {
+            
+        }
+
+        
+    }
+    //rotated
+    else {
+        enemyShipPositionX[i] = Math.floor(Math.random() * (10 - shipLenght[i] + 1));
+        enemyShipPositionY[i] = Math.floor(Math.random() * 10);        
+        enemyShipPosition[i] = enemyShipPositionY[i] * 10 + enemyShipPositionX[i];    
+    }
+}
+
+
+[...enemySquares].forEach((enemySquare, enemySquareIndex) => {
+    enemySquare.addEventListener("click", myAttack);
+    // enemySquare.addEventListener("click") = () => {
+        
+    // }
+    function myAttack() {
+        console.log(enemySquareIndex);
+        enemySquares[enemySquareIndex].style.backgroundColor = "red";
+        playersTurnArrow.style.transform = "rotate(90deg)";
+    }
+});

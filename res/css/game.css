@@ -33,7 +33,6 @@ body {
 
 /* enter nickname */
 #nicknameSection {
-    /* display: none; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -297,10 +296,11 @@ body {
 }
 #playersTurnArrow {
     height: 70%;
-    transform: rotate(-90deg);
+    transform: rotate(270deg);
+    transition: transform 800ms ease-in-out;
 }
 .iconImg {
-    height: 75%;
+    height: 70%;
 }
 .iconName {
     font-size: 20px;
@@ -368,6 +368,13 @@ body {
 }
 
 
+#nicknameSection {
+    display: none;
+}
+#game {
+    scale: 1;
+    top: 0;
+}
 
 
 @keyframes saveShipButtonAnimation {
@@ -381,20 +388,16 @@ body {
         box-shadow: #000000 1px 0px 9px 0px;
     }
 }
-@keyframes slideBuildShip {
-    0% {
-        transform: translateX(0)
-    }
-    100% {
-        transform: translateX(-100%)
-    }
-}
 
-@keyframes slideGame {
+
+@keyframes arrowTurn {
     0% {
-        transform: translateX(100%)
+        transform: rotate(-90deg);
+    }
+    50% {
+        transform: rotate(180deg);
     }
     100% {
-        transform: translateX(0)
+        transform: rotate(90deg);
     }
 }
