@@ -68,6 +68,7 @@ let mySquares = [];
 let enemySquares = [];
 
 let enemySquareFree = [];
+let enemyShipAround = [];
 
 for (let i = 0; i < 100; i++) {
     shipSquareIndex[i] = false;
@@ -89,8 +90,8 @@ for (let i = 0; i < 100; i++) {
     enemyBoard.appendChild(enemySquares[i]);
 
     enemySquareFree[i] = true;
+    enemyShipAround[i] = false;
 }
-
 
 //nickname section
 submitNicknameBtn.onclick = () => {
@@ -104,23 +105,20 @@ submitNicknameBtn.onclick = () => {
         setTimeout(() => {
             nicknameSection.style.display = "none";
         }, 3000);
-    }
-    else if (userNickname.length == 0) {
+    } else if (userNickname.length == 0) {
         nicknameCondition.innerHTML = "Please enter a nickname";
         enterNickname.style.marginTop = "0";
-    }
-    else {
-        nicknameCondition.innerHTML = "Nickname must have at least three characters";
+    } else {
+        nicknameCondition.innerHTML =
+            "Nickname must have at least three characters";
         enterNickname.style.marginTop = "0";
     }
-}
-
+};
 
 //checking if square is free
 function freeSquareCheck() {
     shipFreeSquare = true;
     if (rotateIndex[shipPickedIndex] === false) {
-        
         for (
             let i = shipInGaragePosition[shipPickedIndex];
             i <
@@ -132,11 +130,16 @@ function freeSquareCheck() {
                 shipFreeSquare = false;
             }
         }
-    }
-    else {
-        for (let i = shipInGaragePosition[shipPickedIndex]; i < shipInGaragePosition[shipPickedIndex] + shipBxinShip[shipPickedIndex]; i++) {
+    } else {
+        for (
+            let i = shipInGaragePosition[shipPickedIndex];
+            i <
+            shipInGaragePosition[shipPickedIndex] +
+                shipBxinShip[shipPickedIndex];
+            i++
+        ) {
             if (shipSquareIndex[i] === true) {
-                shipFreeSquare = false
+                shipFreeSquare = false;
             }
         }
     }
@@ -297,7 +300,7 @@ arrowUp.onclick = () => {
 
         freeSquareCheck();
     }
-}
+};
 arrowDown.onclick = () => {
     if (movingIndex === true) {
         goDownFunction();
@@ -306,7 +309,7 @@ arrowDown.onclick = () => {
 
         freeSquareCheck();
     }
-}
+};
 arrowLeft.onclick = () => {
     if (movingIndex === true) {
         goLeftFunction();
@@ -315,7 +318,7 @@ arrowLeft.onclick = () => {
 
         freeSquareCheck();
     }
-}
+};
 arrowRight.onclick = () => {
     if (movingIndex === true) {
         goRightFunction();
@@ -324,35 +327,34 @@ arrowRight.onclick = () => {
 
         freeSquareCheck();
     }
-}
+};
 
 //rotate button clicking
 rotateShipButton.onclick = () => {
-        shipPositionCalc();
-        shipsInGarage[shipPickedIndex].style.transformOrigin = "30px 30px";
-        if (shipBxinShip[shipPickedIndex] % 2 == 0) {
+    shipPositionCalc();
+    shipsInGarage[shipPickedIndex].style.transformOrigin = "30px 30px";
+    if (shipBxinShip[shipPickedIndex] % 2 == 0) {
+    }
+    if (rotateIndex[shipPickedIndex] === false) {
+        rotateIndex[shipPickedIndex] = true;
+        shipsInGarage[shipPickedIndex].style.rotate = "-90deg";
+
+        if (shipInGaragePositionX[shipPickedIndex] > 6) {
+            shipInGaragePositionX[shipPickedIndex] =
+                10 - shipBxinShip[shipPickedIndex];
         }
-        if (rotateIndex[shipPickedIndex] === false) {
-            rotateIndex[shipPickedIndex] = true;
-            shipsInGarage[shipPickedIndex].style.rotate = "-90deg";
+    } else {
+        rotateIndex[shipPickedIndex] = false;
+        shipsInGarage[shipPickedIndex].style.rotate = "0deg";
 
-            if (shipInGaragePositionX[shipPickedIndex] > 6) {
-                shipInGaragePositionX[shipPickedIndex] =
-                    10 - shipBxinShip[shipPickedIndex];
-            }
-
-        } else {
-            rotateIndex[shipPickedIndex] = false;
-            shipsInGarage[shipPickedIndex].style.rotate = "0deg";
-
-            if (shipInGaragePositionY[shipPickedIndex] > 6) {
-                shipInGaragePositionY[shipPickedIndex] =
-                    10 - shipBxinShip[shipPickedIndex];
-            }
+        if (shipInGaragePositionY[shipPickedIndex] > 6) {
+            shipInGaragePositionY[shipPickedIndex] =
+                10 - shipBxinShip[shipPickedIndex];
         }
-        shipPlacingWithPx();
+    }
+    shipPlacingWithPx();
 
-        freeSquareCheck();
+    freeSquareCheck();
 };
 
 //save button clicking
@@ -374,8 +376,7 @@ saveShipButton.onclick = () => {
                 myAreaIndex[savePosition] = 1;
                 savePosition += 10;
             }
-    
-    
+
             if (shipInGaragePositionX[shipPickedIndex] == 0) {
                 savePosition = shipInGaragePosition[shipPickedIndex] - 10;
                 for (let i = 0; i < shipBxinShip[shipPickedIndex] + 2; i++) {
@@ -404,48 +405,57 @@ saveShipButton.onclick = () => {
                     savePosition += 7;
                 }
             }
-        }
-        else {
+        } else {
             //save the position
             for (let i = 0; i < shipBxinShip[shipPickedIndex]; i++) {
                 myAreaIndex[savePosition] = 1;
-                savePosition ++;
+                savePosition++;
             }
 
             if (shipInGaragePositionX[shipPickedIndex] == 0) {
                 savePosition = shipInGaragePosition[shipPickedIndex] - 10;
                 for (let i = 0; i < 3; i++) {
-                    for (let j = 0; j < shipBxinShip[shipPickedIndex]+1; j++) {
+                    for (
+                        let j = 0;
+                        j < shipBxinShip[shipPickedIndex] + 1;
+                        j++
+                    ) {
                         shipSquareIndex[savePosition] = true;
                         savePosition++;
                     }
-                    savePosition += 9-shipBxinShip[shipPickedIndex];
+                    savePosition += 9 - shipBxinShip[shipPickedIndex];
                 }
-            }
-            else if (shipInGaragePositionX[shipPickedIndex] == 10-shipBxinShip[shipPickedIndex]) {
+            } else if (
+                shipInGaragePositionX[shipPickedIndex] ==
+                10 - shipBxinShip[shipPickedIndex]
+            ) {
                 savePosition = shipInGaragePosition[shipPickedIndex] - 11;
                 for (let i = 0; i < 3; i++) {
-                    for (let j = 0; j < shipBxinShip[shipPickedIndex]+1; j++) {
+                    for (
+                        let j = 0;
+                        j < shipBxinShip[shipPickedIndex] + 1;
+                        j++
+                    ) {
                         shipSquareIndex[savePosition] = true;
                         savePosition++;
                     }
-                    savePosition += 9-shipBxinShip[shipPickedIndex];
+                    savePosition += 9 - shipBxinShip[shipPickedIndex];
                 }
-            }
-            else{
+            } else {
                 savePosition = shipInGaragePosition[shipPickedIndex] - 11;
                 for (let i = 0; i < 3; i++) {
-                    for (let j = 0; j < shipBxinShip[shipPickedIndex]+2; j++) {
+                    for (
+                        let j = 0;
+                        j < shipBxinShip[shipPickedIndex] + 2;
+                        j++
+                    ) {
                         shipSquareIndex[savePosition] = true;
                         savePosition++;
                     }
-                    savePosition += 8-shipBxinShip[shipPickedIndex];
+                    savePosition += 8 - shipBxinShip[shipPickedIndex];
                 }
             }
-            
         }
-
-        
 
         for (let i = 0; i < 100; i++) {
             if (shipSquareIndex[i] === true) {
@@ -474,7 +484,7 @@ buildShipContinue.onclick = () => {
     buildShip.style.transition = "2s scale, 2s top, 2s opacity";
     game.style.scale = "1";
     game.style.top = "0";
-    
+
     myBoardTitle.innerText = `${userNickname}'s Board`;
     myIconName.innerText = `${userNickname}`;
 
@@ -483,7 +493,6 @@ buildShipContinue.onclick = () => {
     shipOffSetY = 271;
 
     for (let i = 0; i < shipsInGarage.length; i++) {
-
         myShips[i].style.left = `${
             shipInGaragePositionX[i] * 60 + shipOffSetX
         }px`;
@@ -495,9 +504,7 @@ buildShipContinue.onclick = () => {
             myShips[i].style.rotate = "-90deg";
         }
     }
-    
-    
-}
+};
 
 //gameplay
 let enemySquareIndex;
@@ -507,43 +514,158 @@ let enemyShipRotate = [];
 let enemyShipPosition = [];
 let enemyShipPositionX = [];
 let enemyShipPositionY = [];
-
-
+let enemyShipPlaceCycle;
 
 for (let i = 0; i < 5; i++) {
     enemyShipRotate[i] = Math.floor(Math.random() * 2);
-
     //not rotated
     if (enemyShipRotate[i] === 0) {
-        enemyShipPositionX[i] = Math.floor(Math.random() * 10);        
-        enemyShipPositionY[i] = Math.floor(Math.random() * (10 - shipLenght[i] + 1));
-        enemyShipPosition[i] = enemyShipPositionY[i] * 10 + enemyShipPositionX[i];    
-        
-        let enemySquareFreeCheck = false;
-        for (let j = enemyShipPosition[i]; j < enemyShipPosition[i] + 40; j += 10) {
-            if (enemySquareFree[i] === false) {
-                enemySquareFreeCheck = true;
-            }
-        }
-        if (enemySquareFreeCheck === false) {
-            
-        }
+        do {
+            enemyShipPlaceCycle = false;
 
-        
+            enemyShipPositionX[i] = Math.floor(Math.random() * 10);
+            enemyShipPositionY[i] = Math.floor(
+                Math.random() * (10 - shipLenght[i] + 1)
+            );
+            enemyShipPosition[i] =
+                enemyShipPositionY[i] * 10 + enemyShipPositionX[i];
+
+            let savePosition = enemyShipPosition[i];
+
+            let enemySquareFreeCheck = false;
+            for (
+                let j = enemyShipPosition[i];
+                j < enemyShipPosition[i] + shipLenght[i] * 10;
+                j += 10
+            ) {
+                if (enemyShipAround[j] === true) {
+                    enemySquareFreeCheck = true;
+                }
+            }
+            if (enemySquareFreeCheck === false) {
+                for (
+                    let j = enemyShipPosition[i];
+                    j < enemyShipPosition[i] + shipLenght[i] * 10;
+                    j += 10
+                ) {
+                    enemySquareFree[j] = false;
+                    // enemySquares[j].style.backgroundColor = "blue";
+                }
+                if (enemyShipPositionX[i] == 0) {
+                    savePosition = enemyShipPosition[i] - 10;
+                    for (let k = 0; k < shipLenght[i] + 2; k++) {
+                        for (let j = 0; j < 2; j++) {
+                            enemyShipAround[savePosition] = true;
+                            savePosition++;
+                        }
+                        savePosition += 8;
+                    }
+                } else if (enemyShipPositionX[i] == 9) {
+                    savePosition = enemyShipPosition[i] - 11;
+                    for (let k = 0; k < shipLenght[i] + 2; k++) {
+                        for (let j = 0; j < 2; j++) {
+                            enemyShipAround[savePosition] = true;
+                            savePosition++;
+                        }
+                        savePosition += 8;
+                    }
+                } else {
+                    savePosition = enemyShipPosition[i] - 11;
+                    for (let k = 0; k < shipLenght[i] + 2; k++) {
+                        for (let j = 0; j < 3; j++) {
+                            enemyShipAround[savePosition] = true;
+                            savePosition++;
+                        }
+                        savePosition += 7;
+                    }
+                }
+
+                enemyShipPlaceCycle = true;
+            }
+        } while (!enemyShipPlaceCycle);
     }
     //rotated
     else {
-        enemyShipPositionX[i] = Math.floor(Math.random() * (10 - shipLenght[i] + 1));
-        enemyShipPositionY[i] = Math.floor(Math.random() * 10);        
-        enemyShipPosition[i] = enemyShipPositionY[i] * 10 + enemyShipPositionX[i];    
+        do {
+            enemyShipPlaceCycle = false;
+
+            enemyShipPositionX[i] = Math.floor(
+                Math.random() * (10 - shipLenght[i] + 1)
+            );
+            enemyShipPositionY[i] = Math.floor(Math.random() * 10);
+            enemyShipPosition[i] =
+                enemyShipPositionY[i] * 10 + enemyShipPositionX[i];
+
+            let savePosition = enemyShipPosition[i];
+
+            let enemySquareFreeCheck = false;
+            for (
+                let j = enemyShipPosition[i];
+                j < enemyShipPosition[i] + shipLenght[i];
+                j++
+            ) {
+                if (enemyShipAround[j] === true) {
+                    enemySquareFreeCheck = true;
+                }
+            }
+            if (enemySquareFreeCheck === false) {
+                for (
+                    let j = enemyShipPosition[i];
+                    j < enemyShipPosition[i] + shipLenght[i];
+                    j++
+                ){
+                    enemySquareFree[j] = false;
+                }
+
+            if (enemyShipPositionX[i] == 0) {
+                savePosition = enemyShipPosition[i] - 10;
+                for (let k = 0; k < 3; k++) {
+                    for (let j = 0; j < shipLenght[i] + 1; j++) {
+                        enemyShipAround[savePosition] = true;
+                        savePosition++;
+                    }
+                    savePosition += 9 - shipLenght[i];
+                }
+            } 
+            else if (enemyShipPositionX[i] == 10 - shipLenght[i]) {
+                savePosition = enemyShipPosition[i] - 11;
+                for (let k = 0; k < 3; k++) {
+                    for (let j = 0; j < shipLenght[i] + 1; j++) {
+                        enemyShipAround[savePosition] = true;
+                        savePosition++;
+                    }
+                    savePosition += 9 - shipLenght[i];
+                }
+            } 
+            else {
+                savePosition = enemyShipPosition[i] - 11;
+                for (let k = 0; k < 3; k++) {
+                    for (let j = 0; j < shipLenght[i] + 2; j++) {
+                        enemyShipAround[savePosition] = true;
+                        savePosition++;
+                    }
+                    savePosition += 8 - shipLenght[i];
+                }
+            }
+            enemyShipPlaceCycle = true;
+        }
+
+        } while (!enemyShipPlaceCycle);
+    }
+    for (let e = 0; e < 100; e++) {
+        if (enemyShipAround[e] == true) {
+            enemySquares[e].style.backgroundColor = "pink";
+        }
+        if (enemySquareFree[e] == false) {
+            enemySquares[e].style.backgroundColor = "blue";
+        }
     }
 }
-
 
 [...enemySquares].forEach((enemySquare, enemySquareIndex) => {
     enemySquare.addEventListener("click", myAttack);
     // enemySquare.addEventListener("click") = () => {
-        
+
     // }
     function myAttack() {
         console.log(enemySquareIndex);
