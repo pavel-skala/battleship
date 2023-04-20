@@ -344,20 +344,20 @@ body {
     border: 1px solid white;
 }
 
-.myShips{
+.myShips, .enemyShips{
     width:  60px;
     position: absolute;
     transform-origin: 30px 30px;
     z-index: 10;
 }
 
-.myShipsBx{
+.myShipsBx, .enemyShipsBx {
     background-color: blue;
     height: 60px;
     width: 60px;
 }
 
-.myShipsBxImg{
+.myShipsBxImg, .enemyShipsBxImg {
     width: 100%;
     height: 100%;
     position: absolute;

@@ -30,6 +30,7 @@ const myBoard = document.getElementById("myBoard");
 const myBoardTitle = document.getElementById("myBoardTitle");
 const enemyBoard = document.getElementById("enemyBoard");
 const myShips = document.getElementsByClassName("myShips");
+const enemyShips = document.getElementsByClassName("enemyShips");
 
 const keycodes = {
     //up
@@ -52,6 +53,9 @@ let myAreaIndex = [];
 
 let shipOffSetX = 561;
 let shipOffSetY = 91;
+
+let enemyShipOffSetX = 1011;
+let enemyShipOffSetY = 271;
 
 let shipBxinShip = [];
 let shipInGaragePosition = [];
@@ -509,7 +513,6 @@ buildShipContinue.onclick = () => {
 //gameplay
 let enemySquareIndex;
 
-let enemyShips = [];
 let enemyShipRotate = [];
 let enemyShipPosition = [];
 let enemyShipPositionX = [];
@@ -613,52 +616,61 @@ for (let i = 0; i < 5; i++) {
                     let j = enemyShipPosition[i];
                     j < enemyShipPosition[i] + shipLenght[i];
                     j++
-                ){
+                ) {
                     enemySquareFree[j] = false;
                 }
 
-            if (enemyShipPositionX[i] == 0) {
-                savePosition = enemyShipPosition[i] - 10;
-                for (let k = 0; k < 3; k++) {
-                    for (let j = 0; j < shipLenght[i] + 1; j++) {
-                        enemyShipAround[savePosition] = true;
-                        savePosition++;
+                if (enemyShipPositionX[i] == 0) {
+                    savePosition = enemyShipPosition[i] - 10;
+                    for (let k = 0; k < 3; k++) {
+                        for (let j = 0; j < shipLenght[i] + 1; j++) {
+                            enemyShipAround[savePosition] = true;
+                            savePosition++;
+                        }
+                        savePosition += 9 - shipLenght[i];
                     }
-                    savePosition += 9 - shipLenght[i];
-                }
-            } 
-            else if (enemyShipPositionX[i] == 10 - shipLenght[i]) {
-                savePosition = enemyShipPosition[i] - 11;
-                for (let k = 0; k < 3; k++) {
-                    for (let j = 0; j < shipLenght[i] + 1; j++) {
-                        enemyShipAround[savePosition] = true;
-                        savePosition++;
+                } else if (enemyShipPositionX[i] == 10 - shipLenght[i]) {
+                    savePosition = enemyShipPosition[i] - 11;
+                    for (let k = 0; k < 3; k++) {
+                        for (let j = 0; j < shipLenght[i] + 1; j++) {
+                            enemyShipAround[savePosition] = true;
+                            savePosition++;
+                        }
+                        savePosition += 9 - shipLenght[i];
                     }
-                    savePosition += 9 - shipLenght[i];
-                }
-            } 
-            else {
-                savePosition = enemyShipPosition[i] - 11;
-                for (let k = 0; k < 3; k++) {
-                    for (let j = 0; j < shipLenght[i] + 2; j++) {
-                        enemyShipAround[savePosition] = true;
-                        savePosition++;
+                } else {
+                    savePosition = enemyShipPosition[i] - 11;
+                    for (let k = 0; k < 3; k++) {
+                        for (let j = 0; j < shipLenght[i] + 2; j++) {
+                            enemyShipAround[savePosition] = true;
+                            savePosition++;
+                        }
+                        savePosition += 8 - shipLenght[i];
                     }
-                    savePosition += 8 - shipLenght[i];
                 }
+                enemyShipPlaceCycle = true;
             }
-            enemyShipPlaceCycle = true;
-        }
-
         } while (!enemyShipPlaceCycle);
+    }
+
+    //placing enemy ships
+    enemyShips[i].style.left = `${
+        enemyShipPositionX[i] * 60 + enemyShipOffSetX
+    }px`;
+    enemyShips[i].style.top = `${
+        enemyShipPositionY[i] * 60 + enemyShipOffSetY
+    }px`;
+
+    if (enemyShipRotate[i] == 1) {
+        enemyShips[i].style.rotate = "-90deg";
     }
     for (let e = 0; e < 100; e++) {
         if (enemyShipAround[e] == true) {
             enemySquares[e].style.backgroundColor = "pink";
         }
-        if (enemySquareFree[e] == false) {
-            enemySquares[e].style.backgroundColor = "blue";
-        }
+        // if (enemySquareFree[e] == false) {
+        //     enemySquares[e].style.backgroundColor = "blue";
+        // }
     }
 }
 
