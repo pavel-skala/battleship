@@ -366,7 +366,14 @@ body {
     display: flex;
     justify-content: center;
 }
-
+.enemyShipsImg {
+    transform: rotate(90deg);
+    width: 240px;
+    height: 60px;
+    position: absolute;
+    left: -91px;
+    top: 90px;
+}
 
 #nicknameSection {
     display: none;
