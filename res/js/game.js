@@ -43,7 +43,7 @@ const keycodes = {
     RIGHT: { 39: 1 },
 };
 
-const shipLenght = [4, 3, 2, 2, 1];
+const shipLenght = [4, 3, 3, 2, 2];
 
 let userNickname;
 
@@ -121,6 +121,7 @@ submitNicknameBtn.onclick = () => {
 
 //checking if square is free
 function freeSquareCheck() {
+    shipPositionCalc();
     shipFreeSquare = true;
     if (rotateIndex[shipPickedIndex] === false) {
         for (
@@ -336,12 +337,19 @@ arrowRight.onclick = () => {
 //rotate button clicking
 rotateShipButton.onclick = () => {
     shipPositionCalc();
-    shipsInGarage[shipPickedIndex].style.transformOrigin = "30px 30px";
-    if (shipBxinShip[shipPickedIndex] % 2 == 0) {
+    
+    if (shipBxinShip[shipPickedIndex] == 4) {
+        shipsInGarage[shipPickedIndex].style.transformOrigin = "120px 120px";
+    }
+    else if (shipBxinShip[shipPickedIndex] == 3){
+        shipsInGarage[shipPickedIndex].style.transformOrigin = "90px 90px";
+    }
+    else {
+        shipsInGarage[shipPickedIndex].style.transformOrigin = "60px 60px";
     }
     if (rotateIndex[shipPickedIndex] === false) {
         rotateIndex[shipPickedIndex] = true;
-        shipsInGarage[shipPickedIndex].style.rotate = "-90deg";
+        shipsInGarage[shipPickedIndex].style.rotate = "90deg";
 
         if (shipInGaragePositionX[shipPickedIndex] > 6) {
             shipInGaragePositionX[shipPickedIndex] =
@@ -356,6 +364,8 @@ rotateShipButton.onclick = () => {
                 10 - shipBxinShip[shipPickedIndex];
         }
     }
+    console.log(shipInGaragePositionX[shipPickedIndex]);
+    console.log(shipInGaragePositionY[shipPickedIndex]);
     shipPlacingWithPx();
 
     freeSquareCheck();
