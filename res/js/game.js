@@ -73,6 +73,7 @@ let enemySquares = [];
 
 let enemySquareFree = [];
 let enemyShipAround = [];
+let enemyAreaIndex = [];
 
 for (let i = 0; i < 100; i++) {
     shipSquareIndex[i] = false;
@@ -95,6 +96,7 @@ for (let i = 0; i < 100; i++) {
 
     enemySquareFree[i] = true;
     enemyShipAround[i] = false;
+    enemyAreaIndex[i] = 0;
 }
 
 //nickname section
@@ -290,8 +292,6 @@ document.addEventListener("keydown", ({ keyCode }) => {
             goRightFunction();
         }
 
-        shipPositionCalc();
-
         freeSquareCheck();
     }
 });
@@ -301,16 +301,12 @@ arrowUp.onclick = () => {
     if (movingIndex === true) {
         goUpFunction();
 
-        shipPositionCalc();
-
         freeSquareCheck();
     }
 };
 arrowDown.onclick = () => {
     if (movingIndex === true) {
         goDownFunction();
-
-        shipPositionCalc();
 
         freeSquareCheck();
     }
@@ -319,16 +315,12 @@ arrowLeft.onclick = () => {
     if (movingIndex === true) {
         goLeftFunction();
 
-        shipPositionCalc();
-
         freeSquareCheck();
     }
 };
 arrowRight.onclick = () => {
     if (movingIndex === true) {
         goRightFunction();
-
-        shipPositionCalc();
 
         freeSquareCheck();
     }
@@ -337,19 +329,17 @@ arrowRight.onclick = () => {
 //rotate button clicking
 rotateShipButton.onclick = () => {
     shipPositionCalc();
-    
+
     if (shipBxinShip[shipPickedIndex] == 4) {
         shipsInGarage[shipPickedIndex].style.transformOrigin = "120px 120px";
-    }
-    else if (shipBxinShip[shipPickedIndex] == 3){
+    } else if (shipBxinShip[shipPickedIndex] == 3) {
         shipsInGarage[shipPickedIndex].style.transformOrigin = "90px 90px";
-    }
-    else {
+    } else {
         shipsInGarage[shipPickedIndex].style.transformOrigin = "60px 60px";
     }
     if (rotateIndex[shipPickedIndex] === false) {
         rotateIndex[shipPickedIndex] = true;
-        shipsInGarage[shipPickedIndex].style.rotate = "90deg";
+        shipsInGarage[shipPickedIndex].style.transform = "rotate(90deg)";
 
         if (shipInGaragePositionX[shipPickedIndex] > 6) {
             shipInGaragePositionX[shipPickedIndex] =
@@ -357,7 +347,7 @@ rotateShipButton.onclick = () => {
         }
     } else {
         rotateIndex[shipPickedIndex] = false;
-        shipsInGarage[shipPickedIndex].style.rotate = "0deg";
+        shipsInGarage[shipPickedIndex].style.transform = "rotate(0deg)";
 
         if (shipInGaragePositionY[shipPickedIndex] > 6) {
             shipInGaragePositionY[shipPickedIndex] =
@@ -521,7 +511,8 @@ buildShipContinue.onclick = () => {
 };
 
 //gameplay
-let enemySquareIndex;
+let enemySquareHit;
+
 
 let enemyShipRotate = [];
 let enemyShipPosition = [];
@@ -529,9 +520,17 @@ let enemyShipPositionX = [];
 let enemyShipPositionY = [];
 let enemyShipPlaceCycle;
 
+let enemyShipFullPos = [[],[],[],[],[]];
+
+let enemySunkIndex = [false, false, false, false, false];
+
+//placing enemyShips
 for (let i = 0; i < 5; i++) {
     enemyShipRotate[i] = Math.floor(Math.random() * 2);
     //not rotated
+
+    let savePosition;
+
     if (enemyShipRotate[i] === 0) {
         do {
             enemyShipPlaceCycle = false;
@@ -543,7 +542,7 @@ for (let i = 0; i < 5; i++) {
             enemyShipPosition[i] =
                 enemyShipPositionY[i] * 10 + enemyShipPositionX[i];
 
-            let savePosition = enemyShipPosition[i];
+            savePosition = enemyShipPosition[i];
 
             let enemySquareFreeCheck = false;
             for (
@@ -596,6 +595,15 @@ for (let i = 0; i < 5; i++) {
                 enemyShipPlaceCycle = true;
             }
         } while (!enemyShipPlaceCycle);
+        //save enemy position
+        savePosition = enemyShipPosition[i];
+
+        for (let j = 0; j < shipLenght[i]; j++) {
+            enemyAreaIndex[savePosition] = 1;
+            enemyShipFullPos[i][j] = savePosition;
+
+            savePosition += 10;
+        }
     }
     //rotated
     else {
@@ -661,6 +669,15 @@ for (let i = 0; i < 5; i++) {
                 enemyShipPlaceCycle = true;
             }
         } while (!enemyShipPlaceCycle);
+        //save enemy position
+        savePosition = enemyShipPosition[i];
+
+        for (let j = 0; j < shipLenght[i]; j++) {
+            enemyAreaIndex[savePosition] = 1;
+            enemyShipFullPos[i][j] = savePosition;
+
+            savePosition ++;
+        }
     }
 
     //placing enemy ships
@@ -676,7 +693,7 @@ for (let i = 0; i < 5; i++) {
     }
     for (let e = 0; e < 100; e++) {
         if (enemyShipAround[e] == true) {
-            enemySquares[e].style.backgroundColor = "pink";
+            // enemySquares[e].style.backgroundColor = "pink";
         }
         // if (enemySquareFree[e] == false) {
         //     enemySquares[e].style.backgroundColor = "blue";
@@ -684,14 +701,126 @@ for (let i = 0; i < 5; i++) {
     }
 }
 
-[...enemySquares].forEach((enemySquare, enemySquareIndex) => {
+[...enemySquares].forEach((enemySquare, enemySquareHit) => {
     enemySquare.addEventListener("click", myAttack);
     // enemySquare.addEventListener("click") = () => {
 
     // }
     function myAttack() {
-        console.log(enemySquareIndex);
-        enemySquares[enemySquareIndex].style.backgroundColor = "red";
+        console.log(enemySquareHit);
+        // enemySquares[enemySquareHit].style.backgroundColor = "red";
         playersTurnArrow.style.transform = "rotate(90deg)";
+        console.log(enemyShipFullPos);
+        
+        if (enemyAreaIndex[enemySquareHit] === 1) {
+            enemySquares[enemySquareHit].style.backgroundImage = "url(./res/img/fire.png)";
+
+            let shipHitted;
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < shipLenght[i]; j++) {
+                    if (enemySquareHit === enemyShipFullPos[i][j]) {
+                        shipHitted = i;
+                        enemyShipFullPos[i][j] = undefined;
+                        break;
+                    }
+                }
+                
+            }
+            console.log(enemyShipFullPos[shipHitted]);
+            let shipSunk = true;
+            for (let i = 0; i < shipLenght[shipHitted]; i++) {
+                if (enemyShipFullPos[shipHitted][i] != undefined) {
+                    shipSunk = false;
+                }
+            }
+            let savePosition = enemyShipPosition[shipHitted];
+
+            //if sunked
+            if (shipSunk == true) {
+
+                if (enemyShipRotate[shipHitted] === 0) {
+                    if (enemyShipPositionX[shipHitted] == 0) {
+                        savePosition = enemyShipPosition[shipHitted] - 10;
+                        for (let k = 0; k < shipLenght[shipHitted] + 2; k++) {
+                            for (let j = 0; j < 2; j++) {
+                                enemySquares[savePosition].style.backgroundImage = "url(./res/img/water.png)";
+                                savePosition++;
+                            }
+                            savePosition += 8;
+                        }
+                    } else if (enemyShipPositionX[shipHitted] == 9) {
+                        savePosition = enemyShipPosition[shipHitted] - 11;
+                        for (let k = 0; k < shipLenght[shipHitted] + 2; k++) {
+                            for (let j = 0; j < 2; j++) {
+                                enemySquares[savePosition].style.backgroundImage = "url(./res/img/water.png)";
+                                savePosition++;
+                            }
+                            savePosition += 8;
+                        }
+                    } else {
+                        savePosition = enemyShipPosition[shipHitted] - 11;
+                        for (let k = 0; k < shipLenght[shipHitted] + 2; k++) {
+                            for (let j = 0; j < 3; j++) {
+                                enemySquares[savePosition].style.backgroundImage = "url(./res/img/water.png)";
+                                savePosition++;
+                            }
+                            savePosition += 7;
+                        }
+                    }
+
+                    savePosition = enemyShipPosition[shipHitted];
+                    for (let i = savePosition; i < savePosition + shipLenght[shipHitted]*10; i += 10) {
+                        enemySquares[i].style.backgroundImage = "";
+                    }
+                }
+                else {
+                    if (enemyShipPositionX[shipHitted] == 0) {
+                        savePosition = enemyShipPosition[shipHitted] - 10;
+                        for (let k = 0; k < 3; k++) {
+                            for (let j = 0; j < shipLenght[shipHitted] + 1; j++) {
+                                enemySquares[savePosition].style.backgroundImage = "url(./res/img/water.png)";
+                                savePosition++;
+                            }
+                            savePosition += 9 - shipLenght[i];
+                        }
+                    } else if (enemyShipPositionX[shipHitted] == 10 - shipLenght[shipHitted]) {
+                        savePosition = enemyShipPosition[shipHitted] - 11;
+                        for (let k = 0; k < 3; k++) {
+                            for (let j = 0; j < shipLenght[shipHitted] + 1; j++) {
+                                enemySquares[savePosition].style.backgroundImage = "url(./res/img/water.png)";
+                                savePosition++;
+                            }
+                            savePosition += 9 - shipLenght[shipHitted];
+                        }
+                    } else {
+                        savePosition = enemyShipPosition[shipHitted] - 11;
+                        for (let k = 0; k < 3; k++) {
+                            for (let j = 0; j < shipLenght[shipHitted] + 2; j++) {
+                                enemySquares[savePosition].style.backgroundImage = "url(./res/img/water.png)";
+                                savePosition++;
+                            }
+                            savePosition += 8 - shipLenght[shipHitted];
+                        }
+                    }
+
+                    savePosition = enemyShipPosition[shipHitted];
+                    for (let i = savePosition; i < savePosition + shipLenght[shipHitted]; i++) {
+                        enemySquares[i].style.backgroundImage = "";
+                    }
+                }
+
+                enemyShips[shipHitted].style.display = "block";
+
+
+            }
+            // enemySunkIndex[shipHitted] = true;
+            
+            // if (enemySunkIndex) {
+
+            // }
+        }
+        else if (enemyAreaIndex[enemySquareHit] === 0) {
+            enemySquares[enemySquareHit].style.backgroundImage = "url(./res/img/water.png)";
+        }
     }
 });

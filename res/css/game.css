@@ -120,6 +120,7 @@ body {
     margin-bottom: 60px;
     cursor: pointer;
     position: relative;
+    transition: transform 500ms ease-in-out,left 250ms ease-in-out, top 250ms ease-in-out;
 }
 .shipsGarageBx{
     /* background-color: blue; */
@@ -261,7 +262,6 @@ body {
     display: grid;
     grid-template-columns: repeat(10, 60px);
     grid-template-rows: repeat(10, 60px);
-    background-color: black;
 }
 
 
@@ -328,7 +328,6 @@ body {
     display: flex;
     flex-wrap: wrap;
     border: 1px solid white;
-    background-color: black;
     position: absolute;
     top: 210px;
 }
@@ -338,10 +337,13 @@ body {
 #enemyArea {
     left: 950px;
 }
-
+#myAreaRow, #myAreaColumn, #enemyAreaRow, #enemyAreaColumn {
+    background-color: black;
+}
 .mySquare,
 .enemySquare, .buildSquare {
     border: 1px solid white;
+    background-size: cover;
 }
 
 .myShips, .enemyShips{
@@ -364,6 +366,9 @@ body {
     top: 0;
     display: flex;
     justify-content: center;
+}
+.enemyShips {
+    display: none;
 }
 /* .enemyShipsImg {
     transform: rotate(90deg);
