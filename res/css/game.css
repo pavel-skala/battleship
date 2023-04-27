@@ -345,6 +345,9 @@ body {
     border: 1px solid white;
     background-size: cover;
 }
+.enemySquare {
+    cursor: pointer;
+}
 
 .myShips, .enemyShips{
     width:  60px;
