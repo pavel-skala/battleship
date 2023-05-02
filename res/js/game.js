@@ -753,6 +753,8 @@ for (let i = 0; i < 5; i++) {
 
                 //if sunked
                 if (shipSunk == true) {
+                    enemySunkIndex[shipHitted] = true;
+
                     if (enemyShipRotate[shipHitted] === 0) {
                         if (enemyShipPositionX[shipHitted] == 0) {
                             savePosition = enemyShipPosition[shipHitted] - 10;
@@ -850,34 +852,34 @@ for (let i = 0; i < 5; i++) {
                     for (let i = 0; i < 5; i++) {
                         if (enemyShipRotate[i] === 0) {
                             savePosition = enemyShipPosition[i];
-                            for (
-                                let j = savePosition;
-                                j < savePosition + shipLenght[i] * 10;
-                                j += 10
-                            ) {
-
-                                //dvě lodě oheň,když jedna potopí druhý oheň zmizí
-                                
-                                enemySquares[j].style.backgroundImage = "";
-                                
-                                
+                            if (enemySunkIndex[i] === true) {
+                                for (
+                                    let j = savePosition;
+                                    j < savePosition + shipLenght[i] * 10;
+                                    j += 10
+                                ) {
+                                    enemySquares[j].style.backgroundImage = "";
+                                }    
                             }
+                            
                         } else {
                             savePosition = enemyShipPosition[i];
-                            for (
-                                let j = savePosition;
-                                j < savePosition + shipLenght[i];
-                                j++
-                            ) {
-                                enemySquares[j].style.backgroundImage = "";
-                                console.log(j);
+                            if (enemySunkIndex[i] === true) {
+                                for (
+                                    let j = savePosition;
+                                    j < savePosition + shipLenght[i];
+                                    j++
+                                ) {
+                                    enemySquares[j].style.backgroundImage = "";
+                                }
                             }
+                            
                         }
                     }
 
                     enemyShips[shipHitted].style.display = "block";
+                    
                 }
-                // enemySunkIndex[shipHitted] = true;
 
                 // if (enemySunkIndex) {
 
