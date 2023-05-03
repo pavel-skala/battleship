@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 
 * {
     box-sizing: border-box;
     color: white;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     user-select: none;
 }
 body {
@@ -30,7 +30,6 @@ body {
     top: 0;
 }
 
-
 /* enter nickname */
 #nicknameSection {
     display: flex;
@@ -38,7 +37,7 @@ body {
     align-items: center;
     transition: 2s scale, 2s opacity;
 }
-#nicknameSection h1{
+#nicknameSection h1 {
     font-size: 50px;
     margin-top: 50px;
 }
@@ -78,9 +77,8 @@ body {
     box-shadow: 2px 2px 13px 2px #ffffff66;
 }
 
-
 /* building ship */
-#buildShip{
+#buildShip {
     height: auto;
     display: flex;
     position: absolute;
@@ -116,18 +114,19 @@ body {
     top: 100px;
 }
 .shipsInGarage {
-    width:  60px;
+    width: 60px;
     margin-bottom: 60px;
     cursor: pointer;
     position: relative;
-    transition: transform 500ms ease-in-out,left 250ms ease-in-out, top 250ms ease-in-out;
+    transition: transform 500ms ease-in-out, left 250ms ease-in-out,
+        top 250ms ease-in-out;
 }
-.shipsGarageBx{
+.shipsGarageBx {
     /* background-color: blue; */
     height: 60px;
     width: 60px;
 }
-.shipInGarageBxImg{
+.shipInGarageBxImg {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -151,7 +150,7 @@ body {
     display: flex;
     justify-content: space-between;
 }
-.arrow{
+.arrow {
     width: 60px;
     color: white;
     cursor: pointer;
@@ -180,7 +179,7 @@ body {
     top: 350px;
     border-radius: 8px;
 }
-#saveShipButton{
+#saveShipButton {
     color: black;
     font-size: 50px;
     background-color: white;
@@ -194,10 +193,11 @@ body {
     top: 500px;
     border-radius: 8px;
 }
-.saveShipAnimation{
-    animation: saveShipButtonAnimation 1s ease  1 forwards;
+.saveShipAnimation {
+    animation: saveShipButtonAnimation 1s ease 1 forwards;
 }
-#saveButtonOverLap, #rotateButtonOverLap {
+#saveButtonOverLap,
+#rotateButtonOverLap {
     width: 250px;
     height: 100px;
     position: absolute;
@@ -207,10 +207,10 @@ body {
     z-index: 10;
 }
 
-#rotateButtonOverLap{
+#rotateButtonOverLap {
     top: 345px;
 }
-#buildShipContinue{
+#buildShipContinue {
     display: none;
     color: rgb(255, 255, 255);
     background-color: rgb(0, 0, 0);
@@ -237,16 +237,25 @@ body {
     top: 130px;
     background-color: black;
 }
-#buildAreaRow, #myAreaRow, #enemyAreaRow{
+#buildAreaRow,
+#myAreaRow,
+#enemyAreaRow {
     width: 660px;
     height: 60px;
     display: flex;
 }
-#buildAreaColumn, #myAreaColumn, #enemyAreaColumn{
+#buildAreaColumn,
+#myAreaColumn,
+#enemyAreaColumn {
     display: flex;
     flex-direction: column;
 }
-.buildSquareRow, .buildSquareColumn, .mySquareRow, .mySquareColumn, .enemySquareRow, .enemySquareColumn {
+.buildSquareRow,
+.buildSquareColumn,
+.mySquareRow,
+.mySquareColumn,
+.enemySquareRow,
+.enemySquareColumn {
     width: 60px;
     height: 60px;
     border: 1px solid white;
@@ -256,7 +265,9 @@ body {
     justify-content: center;
 }
 
-#buildBoard, #myBoard, #enemyBoard{
+#buildBoard,
+#myBoard,
+#enemyBoard {
     height: auto;
     width: auto;
     display: grid;
@@ -264,10 +275,8 @@ body {
     grid-template-rows: repeat(10, 60px);
 }
 
-
-
 /* game */
-#game{
+#game {
     height: auto;
     display: flex;
     position: absolute;
@@ -277,13 +286,14 @@ body {
     transition: 2s scale 350ms ease-out, 2s top 350ms ease-out;
 }
 
-#playersTurn{
+#playersTurn {
     display: flex;
     position: absolute;
     left: 660px;
     top: 20px;
 }
-#myIcon, #enemyIcon {
+#myIcon,
+#enemyIcon {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -307,22 +317,21 @@ body {
     margin-top: 5px;
 }
 
-
-
-#game h2{
+#game h2 {
     position: absolute;
     top: 150px;
     margin: 0;
     font-size: 40px;
 }
-#game h2:first-of-type{
+#game h2:first-of-type {
     left: 350px;
 }
-#game h2:last-of-type{
+#game h2:last-of-type {
     left: 1180px;
 }
 
-#myArea, #enemyArea {
+#myArea,
+#enemyArea {
     height: auto;
     width: 662px;
     display: flex;
@@ -337,11 +346,15 @@ body {
 #enemyArea {
     left: 950px;
 }
-#myAreaRow, #myAreaColumn, #enemyAreaRow, #enemyAreaColumn {
+#myAreaRow,
+#myAreaColumn,
+#enemyAreaRow,
+#enemyAreaColumn {
     background-color: black;
 }
 .mySquare,
-.enemySquare, .buildSquare {
+.enemySquare,
+.buildSquare {
     border: 1px solid white;
     background-size: cover;
 }
@@ -349,22 +362,26 @@ body {
     cursor: pointer;
 }
 
-.myShips, .enemyShips{
-    width:  60px;
+.myShips,
+.enemyShips {
+    width: 60px;
     position: absolute;
     transform-origin: 30px 30px;
     z-index: 10;
 }
 
-.myShipsBx, .enemyShipsBx {
+.myShipsBx {
     height: 60px;
     width: 60px;
     background-repeat: no-repeat;
-    background-size: 40px;
-    background-position: center calc(var(--imgCount) * -60px);
+    position: relative;
 }
-
-.myShipsBxImg, .enemyShipsBxImg {
+.enemyShipsBx {
+    height: 60px;
+    width: 60px;
+}
+.myShipsBxImg,
+.enemyShipsBxImg {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -398,19 +415,17 @@ body {
     top: 0;
 } */
 
-
 @keyframes saveShipButtonAnimation {
     0% {
         box-shadow: #000000 1px 0px 9px 0px;
     }
-    50%{
+    50% {
         box-shadow: red 1px 0px 20px 20px;
     }
-    100%{
+    100% {
         box-shadow: #000000 1px 0px 9px 0px;
     }
 }
-
 
 @keyframes arrowTurn {
     0% {

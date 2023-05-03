@@ -101,24 +101,22 @@ for (let i = 0; i < 100; i++) {
     enemySquareClicked[i] = false;
 }
 console.log(myShipsBx.length);
-// for (let i = 0; i < 5; i++) {
-//     for (let j = 0; j < shipLenght[i]; j++) {
-//         myShipsBx[i].style.backgroundImage = `url(./res/img/shipFire0.png)`
-//         myShipsBx[i].style.setProperty('--imgCount', i);
-//     }
-// }
 
-let helpCount = 0;
+let myShipBxCount = 0;
 
-shipLenght.forEach((ship, index) => {
-    for (let i = 0; i < ship; i++) {
-        myShipsBx[helpCount].style.backgroundImage = `url(./res/img/shipFire0.png)`
-        myShipsBx[helpCount].style.setProperty('--imgCount', i);
-
-        helpCount++;
+let shipBgOffset = [40.8, 32.5, 32.5, 36, 36];
+for (let i = 0; i < shipLenght.length; i++) {
+    for (let j = 0; j < shipLenght[i]; j++) {
+        myShipsBx[myShipBxCount].style.backgroundPosition = `center ${
+            j * -60
+        }px`;
+        myShipsBx[
+            myShipBxCount
+        ].style.backgroundImage = `url(./res/img/shipFire${i}.png)`;
+        myShipsBx[myShipBxCount].style.backgroundSize = `${shipBgOffset[i]}px`;
+        myShipBxCount++;
     }
-})
-
+}
 
 //nickname section
 submitNicknameBtn.onclick = () => {
@@ -162,8 +160,7 @@ function freeSquareCheck() {
         for (
             let i = shipInGaragePosition[shipPickedIndex];
             i <
-            shipInGaragePosition[shipPickedIndex] +
-                shipLenght[shipPickedIndex];
+            shipInGaragePosition[shipPickedIndex] + shipLenght[shipPickedIndex];
             i++
         ) {
             if (shipSquareIndex[i] === true) {
@@ -435,11 +432,7 @@ saveShipButton.onclick = () => {
             if (shipInGaragePositionX[shipPickedIndex] == 0) {
                 savePosition = shipInGaragePosition[shipPickedIndex] - 10;
                 for (let i = 0; i < 3; i++) {
-                    for (
-                        let j = 0;
-                        j < shipLenght[shipPickedIndex] + 1;
-                        j++
-                    ) {
+                    for (let j = 0; j < shipLenght[shipPickedIndex] + 1; j++) {
                         shipSquareIndex[savePosition] = true;
                         savePosition++;
                     }
@@ -451,11 +444,7 @@ saveShipButton.onclick = () => {
             ) {
                 savePosition = shipInGaragePosition[shipPickedIndex] - 11;
                 for (let i = 0; i < 3; i++) {
-                    for (
-                        let j = 0;
-                        j < shipLenght[shipPickedIndex] + 1;
-                        j++
-                    ) {
+                    for (let j = 0; j < shipLenght[shipPickedIndex] + 1; j++) {
                         shipSquareIndex[savePosition] = true;
                         savePosition++;
                     }
@@ -464,11 +453,7 @@ saveShipButton.onclick = () => {
             } else {
                 savePosition = shipInGaragePosition[shipPickedIndex] - 11;
                 for (let i = 0; i < 3; i++) {
-                    for (
-                        let j = 0;
-                        j < shipLenght[shipPickedIndex] + 2;
-                        j++
-                    ) {
+                    for (let j = 0; j < shipLenght[shipPickedIndex] + 2; j++) {
                         shipSquareIndex[savePosition] = true;
                         savePosition++;
                     }
@@ -732,8 +717,6 @@ for (let i = 0; i < 5; i++) {
     }
 }
 
-
-
 [...enemySquares].forEach((enemySquare, enemySquareHit) => {
     enemySquare.addEventListener("click", myAttack);
     // enemySquare.addEventListener("click") = () => {
@@ -741,7 +724,6 @@ for (let i = 0; i < 5; i++) {
     // }
     function myAttack() {
         if (enemySquareClicked[enemySquareHit] === false) {
-            
             enemySquareClicked[enemySquareHit] = true;
             enemySquares[enemySquareHit].style.cursor = "auto";
 
@@ -879,9 +861,8 @@ for (let i = 0; i < 5; i++) {
                                     j += 10
                                 ) {
                                     enemySquares[j].style.backgroundImage = "";
-                                }    
+                                }
                             }
-                            
                         } else {
                             savePosition = enemyShipPosition[i];
                             if (enemySunkIndex[i] === true) {
@@ -893,12 +874,10 @@ for (let i = 0; i < 5; i++) {
                                     enemySquares[j].style.backgroundImage = "";
                                 }
                             }
-                            
                         }
                     }
 
                     enemyShips[shipHitted].style.display = "block";
-                    
                 }
 
                 // if (enemySunkIndex) {
@@ -909,28 +888,26 @@ for (let i = 0; i < 5; i++) {
                     "url(./res/img/water.png)";
             }
 
-        //enemy shot
-        setTimeout(() => {
-            enemyAttack();
-        }, 1000);
+            //enemy shot
+            setTimeout(() => {
+                enemyAttack();
+            }, 1000);
         }
-
-        
     }
 });
 
-
 //enemy attack
 function enemyAttack() {
-
-    let enemyShotPos = Math.floor(Math.random()*100);
+    let enemyShotPos = Math.floor(Math.random() * 100);
 
     //water
     if (myAreaIndex[enemyShotPos] == 0) {
-        mySquares[enemyShotPos].style.backgroundImage = "url(./res/img/water.png)"
+        mySquares[enemyShotPos].style.backgroundImage =
+            "url(./res/img/water.png)";
     }
     //ship
-    else if(myAreaIndex[enemyShotPos] == 1){
-        mySquares[enemyShotPos].style.backgroundImage = "url(./res/img/fire.png)"
+    else if (myAreaIndex[enemyShotPos] == 1) {
+        mySquares[enemyShotPos].style.backgroundImage =
+            "url(./res/img/fire.png)";
     }
 }
