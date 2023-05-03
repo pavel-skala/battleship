@@ -30,6 +30,7 @@ const myBoard = document.getElementById("myBoard");
 const myBoardTitle = document.getElementById("myBoardTitle");
 const enemyBoard = document.getElementById("enemyBoard");
 const myShips = document.getElementsByClassName("myShips");
+const myShipsBx = document.getElementsByClassName("myShipsBx");
 const enemyShips = document.getElementsByClassName("enemyShips");
 
 const keycodes = {
@@ -99,6 +100,25 @@ for (let i = 0; i < 100; i++) {
     enemyAreaIndex[i] = 0;
     enemySquareClicked[i] = false;
 }
+console.log(myShipsBx.length);
+// for (let i = 0; i < 5; i++) {
+//     for (let j = 0; j < shipLenght[i]; j++) {
+//         myShipsBx[i].style.backgroundImage = `url(./res/img/shipFire0.png)`
+//         myShipsBx[i].style.setProperty('--imgCount', i);
+//     }
+// }
+
+let helpCount = 0;
+
+shipLenght.forEach((ship, index) => {
+    for (let i = 0; i < ship; i++) {
+        myShipsBx[helpCount].style.backgroundImage = `url(./res/img/shipFire0.png)`
+        myShipsBx[helpCount].style.setProperty('--imgCount', i);
+
+        helpCount++;
+    }
+})
+
 
 //nickname section
 submitNicknameBtn.onclick = () => {

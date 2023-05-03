@@ -359,6 +359,9 @@ body {
 .myShipsBx, .enemyShipsBx {
     height: 60px;
     width: 60px;
+    background-repeat: no-repeat;
+    background-size: 40px;
+    background-position: center calc(var(--imgCount) * -60px);
 }
 
 .myShipsBxImg, .enemyShipsBxImg {
@@ -370,6 +373,7 @@ body {
     display: flex;
     justify-content: center;
 }
+
 .enemyShips {
     display: none;
 }
@@ -385,14 +389,14 @@ body {
 #nicknameSection {
     display: none;
 }
-/* #buildShip {
-    scale: 1;
-    top: 0;
-} */
-#game {
+#buildShip {
     scale: 1;
     top: 0;
 }
+/* #game {
+    scale: 1;
+    top: 0;
+} */
 
 
 @keyframes saveShipButtonAnimation {
