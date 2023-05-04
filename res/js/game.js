@@ -67,6 +67,8 @@ let rotateIndex = [];
 let shipFreeSquare = true;
 let savedShipsCount = 0;
 
+let myShipsFullPos = [[],[],[], [], []];
+
 let buildSquare = [];
 let mySquares = [];
 let enemySquares = [];
@@ -100,7 +102,6 @@ for (let i = 0; i < 100; i++) {
     enemyAreaIndex[i] = 0;
     enemySquareClicked[i] = false;
 }
-console.log(myShipsBx.length);
 
 let myShipBxCount = 0;
 
@@ -391,6 +392,7 @@ saveShipButton.onclick = () => {
             //save the position
             for (let i = 0; i < shipLenght[shipPickedIndex]; i++) {
                 myAreaIndex[savePosition] = 1;
+                myShipsFullPos[shipPickedIndex][i] = savePosition;
                 savePosition += 10;
             }
 
@@ -426,6 +428,7 @@ saveShipButton.onclick = () => {
             //save the position
             for (let i = 0; i < shipLenght[shipPickedIndex]; i++) {
                 myAreaIndex[savePosition] = 1;
+                myShipsFullPos[shipPickedIndex][i] = savePosition;
                 savePosition++;
             }
 
@@ -532,6 +535,8 @@ let enemyShipFullPos = [[], [], [], [], []];
 
 let enemySunkIndex = [false, false, false, false, false];
 let enemyWaterAround = [];
+
+let playerTurn = 0;
 
 //placing enemyShips
 for (let i = 0; i < 5; i++) {
@@ -718,12 +723,12 @@ for (let i = 0; i < 5; i++) {
 }
 
 [...enemySquares].forEach((enemySquare, enemySquareHit) => {
-    enemySquare.addEventListener("click", myAttack);
-    // enemySquare.addEventListener("click") = () => {
 
-    // }
+    enemySquare.addEventListener("click", myAttack);
+    
     function myAttack() {
-        if (enemySquareClicked[enemySquareHit] === false) {
+        
+        if (enemySquareClicked[enemySquareHit] === false && playerTurn == 0) {
             enemySquareClicked[enemySquareHit] = true;
             enemySquares[enemySquareHit].style.cursor = "auto";
 
@@ -744,7 +749,7 @@ for (let i = 0; i < 5; i++) {
                         }
                     }
                 }
-                console.log("shipHitted - " + shipHitted);
+                
                 let shipSunk = true;
                 for (let i = 0; i < shipLenght[shipHitted]; i++) {
                     if (enemyShipFullPos[shipHitted][i] != undefined) {
@@ -848,6 +853,7 @@ for (let i = 0; i < 5; i++) {
                         if (enemyWaterAround[i] === true) {
                             enemySquares[i].style.backgroundImage =
                                 "url(./res/img/water.png)";
+                            //okolo lodi jde kliknout
                         }
                     }
 
@@ -888,18 +894,22 @@ for (let i = 0; i < 5; i++) {
                     "url(./res/img/water.png)";
             }
 
+            playerTurn = 1;
             //enemy shot
             setTimeout(() => {
                 enemyAttack();
-            }, 1000);
+            }, 2000);
         }
     }
 });
+    
 
 //enemy attack
 function enemyAttack() {
     let enemyShotPos = Math.floor(Math.random() * 100);
 
+
+    playersTurnArrow.style.transform = "rotate(270deg)"
     //water
     if (myAreaIndex[enemyShotPos] == 0) {
         mySquares[enemyShotPos].style.backgroundImage =
@@ -907,7 +917,30 @@ function enemyAttack() {
     }
     //ship
     else if (myAreaIndex[enemyShotPos] == 1) {
-        mySquares[enemyShotPos].style.backgroundImage =
-            "url(./res/img/fire.png)";
+        // mySquares[enemyShotPos].style.backgroundImage =
+        //     "url(./res/img/fire.png)";
+
+        let shipHitted;
+        let shipHittedBxPos;
+        for (let i = 0; i < 5; i++) {
+            for (let j = 0; j < shipLenght[i]; j++) {
+                if (enemyShotPos == myShipsFullPos[i][j]) {
+                    shipHitted = i;
+                    enemyShipFullPos[i][j] = undefined;
+                    shipHittedBxPos = j;
+                    break;
+                }
+            }
+            
+        }
+
+        for (let i = 0; i < shipHitted; i++) {
+            shipHittedBxPos += myShipsFullPos[i].length;
+        }
+
+
+        myShipsBx[shipHittedBxPos].style.zIndex = "100";
+
     }
+    playerTurn = 0;
 }
