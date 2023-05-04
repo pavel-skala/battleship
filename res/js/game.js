@@ -78,6 +78,8 @@ let enemyShipAround = [];
 let enemyAreaIndex = [];
 let enemySquareClicked = [];
 
+let mySquaresCanBeHit = [];
+
 for (let i = 0; i < 100; i++) {
     shipSquareIndex[i] = false;
     myAreaIndex[i] = 0;
@@ -101,6 +103,8 @@ for (let i = 0; i < 100; i++) {
     enemyShipAround[i] = false;
     enemyAreaIndex[i] = 0;
     enemySquareClicked[i] = false;
+
+    mySquaresCanBeHit[i] = true;
 }
 
 let myShipBxCount = 0;
@@ -722,44 +726,46 @@ for (let i = 0; i < 5; i++) {
     }
 }
 
+console.log(enemyShipFullPos);
+
 [...enemySquares].forEach((enemySquare, enemySquareHit) => {
 
     enemySquare.addEventListener("click", myAttack);
     
     function myAttack() {
-        
+
         if (enemySquareClicked[enemySquareHit] === false && playerTurn == 0) {
             enemySquareClicked[enemySquareHit] = true;
             enemySquares[enemySquareHit].style.cursor = "auto";
-
-            // enemySquares[enemySquareHit].style.backgroundColor = "red";
+            playerTurn = 1;
+            
             playersTurnArrow.style.transform = "rotate(90deg)";
 
-            if (enemyAreaIndex[enemySquareHit] === 1) {
+            if (enemyAreaIndex[enemySquareHit] == 1) {
                 enemySquares[enemySquareHit].style.backgroundImage =
                     "url(./res/img/fire.png)";
 
                 let shipHitted;
                 for (let i = 0; i < 5; i++) {
                     for (let j = 0; j < shipLenght[i]; j++) {
-                        if (enemySquareHit === enemyShipFullPos[i][j]) {
+                        if (enemySquareHit == enemyShipFullPos[i][j]) {
                             shipHitted = i;
                             enemyShipFullPos[i][j] = undefined;
                             break;
                         }
                     }
                 }
-                
+
                 let shipSunk = true;
                 for (let i = 0; i < shipLenght[shipHitted]; i++) {
                     if (enemyShipFullPos[shipHitted][i] != undefined) {
                         shipSunk = false;
                     }
                 }
-                let savePosition = enemyShipPosition[shipHitted];
-
+                
                 //if sunked
                 if (shipSunk == true) {
+                    let savePosition = enemyShipPosition[shipHitted];
                     enemySunkIndex[shipHitted] = true;
 
                     if (enemyShipRotate[shipHitted] === 0) {
@@ -853,7 +859,8 @@ for (let i = 0; i < 5; i++) {
                         if (enemyWaterAround[i] === true) {
                             enemySquares[i].style.backgroundImage =
                                 "url(./res/img/water.png)";
-                            //okolo lodi jde kliknout
+                            enemySquareClicked[i] = true;
+                            enemySquares[i].style.cursor = "auto";
                         }
                     }
 
@@ -867,6 +874,7 @@ for (let i = 0; i < 5; i++) {
                                     j += 10
                                 ) {
                                     enemySquares[j].style.backgroundImage = "";
+                                    
                                 }
                             }
                         } else {
@@ -894,11 +902,11 @@ for (let i = 0; i < 5; i++) {
                     "url(./res/img/water.png)";
             }
 
-            playerTurn = 1;
+            
             //enemy shot
             setTimeout(() => {
                 enemyAttack();
-            }, 2000);
+            }, 300);
         }
     }
 });
@@ -906,10 +914,20 @@ for (let i = 0; i < 5; i++) {
 
 //enemy attack
 function enemyAttack() {
-    let enemyShotPos = Math.floor(Math.random() * 100);
+    let enemyShotPos;
+    let enemyShotPosCycle;
+    do {
+        enemyShotPosCycle = false;
+        enemyShotPos = Math.floor(Math.random() * 100);
+        if (mySquaresCanBeHit[enemyShotPos] == true) {
+            enemyShotPosCycle = true;
+        }
+        else console.log("hovnoooooooo");
+    } while (!enemyShotPosCycle);
+    
 
-
-    playersTurnArrow.style.transform = "rotate(270deg)"
+    playersTurnArrow.style.transform = "rotate(270deg)";
+    mySquaresCanBeHit[enemyShotPos] = false;
     //water
     if (myAreaIndex[enemyShotPos] == 0) {
         mySquares[enemyShotPos].style.backgroundImage =
@@ -917,8 +935,6 @@ function enemyAttack() {
     }
     //ship
     else if (myAreaIndex[enemyShotPos] == 1) {
-        // mySquares[enemyShotPos].style.backgroundImage =
-        //     "url(./res/img/fire.png)";
 
         let shipHitted;
         let shipHittedBxPos;
@@ -926,7 +942,7 @@ function enemyAttack() {
             for (let j = 0; j < shipLenght[i]; j++) {
                 if (enemyShotPos == myShipsFullPos[i][j]) {
                     shipHitted = i;
-                    enemyShipFullPos[i][j] = undefined;
+                    myShipsFullPos[i][j] = undefined;
                     shipHittedBxPos = j;
                     break;
                 }
@@ -938,9 +954,28 @@ function enemyAttack() {
             shipHittedBxPos += myShipsFullPos[i].length;
         }
 
-
+        console.log(shipHittedBxPos);
         myShipsBx[shipHittedBxPos].style.zIndex = "100";
 
+        let shipSunk = true;
+        for (let i = 0; i < shipLenght[shipHitted]; i++) {
+            if (myShipsFullPos[shipHitted][i] != undefined) {
+                shipSunk = false;
+            }
+        }
+
+        if (shipSunk == true) {
+            myShips[shipHitted].style.filter = "brightness(35%)";
+
+            shipHittedBxPos = 0;
+            for (let i = 0; i < shipHitted; i++) {
+                shipHittedBxPos += myShipsFullPos[i].length;
+            }
+
+            for (let i = shipHittedBxPos; i < shipHittedBxPos+shipLenght[shipHitted]; i++) {
+                myShipsBx[i].style.zIndex = "0";
+            }
+        }
     }
     playerTurn = 0;
 }
