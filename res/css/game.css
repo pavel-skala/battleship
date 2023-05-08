@@ -393,6 +393,7 @@ body {
 
 .enemyShips {
     display: none;
+    filter: brightness(35%);
 }
 /* .enemyShipsImg {
     transform: rotate(90deg);
