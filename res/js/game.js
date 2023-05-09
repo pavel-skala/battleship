@@ -888,9 +888,8 @@ let shotSideOffset;
 let saveShotPosition;
 let saveShotPositionX;
 let saveShotPositionY;
-let shipMiddleHitted = false;
-let shipMidSecondHit = false;
 let saveShotSide;
+let secondHit;
 
 //enemy attack
 function enemyAttack() {
@@ -899,55 +898,74 @@ function enemyAttack() {
     do {
         enemyShotPosCycle = false;
         enemyShotPos = Math.floor(Math.random() * 100);
-        // enemyShotPos = 90;
         shotSideOffset = [-10, -1, 1, 10];
 
         if (mySquaresCanBeHit[enemyShotPos] === true) {
-        if (shipFire === true) {
-            let randomSide = Math.floor(Math.random() * 4);
+            if (shipFire === true) {
+                let randomSide = Math.floor(Math.random() * 4);
 
-            enemyShotPos = saveShotPosition + shotSideOffset[randomSide];
-            if (saveShotPosition == 0) {
-                shotSideOffset[0] = undefined;
-                shotSideOffset[1] = undefined;
-            } else if (saveShotPosition == 9) {
-                shotSideOffset[0] = undefined;
-                shotSideOffset[2] = undefined;
-            } else if (saveShotPosition == 90) {
-                shotSideOffset[1] = undefined;
-                shotSideOffset[3] = undefined;
-            } else if (saveShotPosition == 99) {
-                shotSideOffset[2] = undefined;
-                shotSideOffset[3] = undefined;
-            } else if (saveShotPositionX == 0) {
-                shotSideOffset[1] = undefined;
-            } else if (saveShotPositionX == 9) {
-                shotSideOffset[2] = undefined;
-            } else if (saveShotPositionY == 0) {
-                shotSideOffset[0] = undefined;
-            } else if (saveShotPositionY == 9) {
-                shotSideOffset[3] = undefined;
+                enemyShotPos = saveShotPosition + shotSideOffset[randomSide];
+                if (saveShotPosition == 0) {
+                    shotSideOffset[0] = undefined;
+                    shotSideOffset[1] = undefined;
+                } else if (saveShotPosition == 9) {
+                    shotSideOffset[0] = undefined;
+                    shotSideOffset[2] = undefined;
+                } else if (saveShotPosition == 90) {
+                    shotSideOffset[1] = undefined;
+                    shotSideOffset[3] = undefined;
+                } else if (saveShotPosition == 99) {
+                    shotSideOffset[2] = undefined;
+                    shotSideOffset[3] = undefined;
+                } else if (saveShotPositionX == 0) {
+                    shotSideOffset[1] = undefined;
+                } else if (saveShotPositionX == 9) {
+                    shotSideOffset[2] = undefined;
+                } else if (saveShotPositionY == 0) {
+                    shotSideOffset[0] = undefined;
+                } else if (saveShotPositionY == 9) {
+                    shotSideOffset[3] = undefined;
+                }
+                
+                if (secondHit === true) {
+                    console.log("second hit");
+                    let randomSideCycle;
+                    let num = 1;
+                    do {
+                        randomSideCycle = false;
+                        
+                        enemyShotPos = saveShotPosition + shotSideOffset[saveShotSide] * num;
+
+                        if (shotSideOffset[saveShotSide] != undefined &&
+                            mySquaresCanBeHit[enemyShotPos] === true) {
+                            randomSideCycle = true;
+                        }
+                        else {
+                            enemyShotPos = saveShotPosition + shotSideOffset[3 - saveShotSide] * num;
+
+                            if (shotSideOffset[saveShotSide] != undefined &&
+                                mySquaresCanBeHit[enemyShotPos] === true) {
+                                randomSideCycle = true;
+                            }
+                        }
+                        num++;
+                    } while (!randomSideCycle);
+                    enemyShotPosCycle = true;
+                    break;
+                }
+
+                if (
+                    shotSideOffset[randomSide] != undefined &&
+                    mySquaresCanBeHit[enemyShotPos] === true
+                ) {
+                    console.log("save");
+                    saveShotSide = randomSide;
+                    enemyShotPosCycle = true;
+                }
             } else {
-            }
-            if (shipMidSecondHit === true) {
-                saveShotSide = 3 - saveShotSide;
-                enemyShotPos = saveShotPosition + shotSideOffset[saveShotSide];
-                console.log(enemyShotPos);
-            } else if (shipMiddleHitted === true) {
-                saveShotSide = randomSide;
-            }
-
-            if (
-                shotSideOffset[randomSide] != undefined &&
-                mySquaresCanBeHit[enemyShotPos] === true
-            ) {
                 enemyShotPosCycle = true;
             }
-        } else {
-            enemyShotPosCycle = true;
-        }
-        }
-        else console.log("znova");
+        } else console.log("znova");
     } while (!enemyShotPosCycle);
 
     playersTurnArrow.style.transform = "rotate(270deg)";
@@ -971,22 +989,10 @@ function enemyAttack() {
                 }
             }
         }
-
-        if (shipMiddleHitted === true) {
-            shipMidSecondHit = true;
-        } else {
-            console.log("save");
-            saveShotPosition = enemyShotPos;
-            saveShotPositionX = saveShotPosition % 10;
-            saveShotPositionY = Math.floor(saveShotPosition / 10);
+        if (shipFire === true) {
+            secondHit = true;
         }
-
-        if (
-            shipHitted == 1 ||
-            (shipHitted == 2 && shipHittedBxPos == 1 && shipFire === false)
-        ) {
-            shipMiddleHitted = true;
-        }
+            
 
         if (rotateIndex[shipHitted] === true) {
             shipHittedBxPos = shipLenght[shipHitted] - shipHittedBxPos - 1;
@@ -1009,8 +1015,7 @@ function enemyAttack() {
         if (shipSunk === true) {
             myShips[shipHitted].style.filter = "brightness(35%)";
             shipFire = false;
-            shipMiddleHitted = false;
-            shipMidSecondHit = false;
+            secondHit = false;
 
             myShipPosition[shipHitted] =
                 myShipPositionY[shipHitted] * 10 + myShipPositionX[shipHitted];
@@ -1116,6 +1121,10 @@ function enemyAttack() {
             }
         } else {
             shipFire = true;
+
+            saveShotPosition = enemyShotPos;
+            saveShotPositionX = saveShotPosition % 10;
+            saveShotPositionY = Math.floor(saveShotPosition / 10);
         }
     }
     playerTurn = 0;

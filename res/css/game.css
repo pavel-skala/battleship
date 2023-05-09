@@ -118,6 +118,8 @@ body {
     margin-bottom: 60px;
     cursor: pointer;
     position: relative;
+    left: 0;
+    top: 0;
     transition: transform 500ms ease-in-out, left 250ms ease-in-out,
         top 250ms ease-in-out;
 }
