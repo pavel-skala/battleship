@@ -33,6 +33,9 @@ const myShips = document.getElementsByClassName("myShips");
 const myShipsBx = document.getElementsByClassName("myShipsBx");
 const enemyShips = document.getElementsByClassName("enemyShips");
 
+const myBullet = document.getElementById("myBullet")
+const enemyBullet = document.getElementById("enemyBullet")
+
 const keycodes = {
     //up
     UP: { 38: 1 },
@@ -493,7 +496,6 @@ buildShipContinue.onclick = () => {
     game.style.top = "0";
     console.log(myAreaIndex);
 
-    myBoardTitle.innerText = `${userNickname}'s Board`;
     myIconName.innerText = `${userNickname}`;
 
     //place my ships on my area
@@ -709,14 +711,33 @@ for (let i = 0; i < 5; i++) {
     }
 }
 
+let squarePosX;
+let squarePosY;
+
 [...enemySquares].forEach((enemySquare, enemySquareHit) => {
     enemySquare.addEventListener("click", myAttack);
 
+    
     function myAttack() {
         if (enemySquareClicked[enemySquareHit] === false && playerTurn == 0) {
             enemySquareClicked[enemySquareHit] = true;
             enemySquares[enemySquareHit].style.cursor = "auto";
             playerTurn = 1;
+
+            squarePosX = 964 + enemySquareHit % 10 * 60;
+            squarePosY = 140 + Math.floor(enemySquareHit / 10) * 60;
+            myBullet.style.transition =  "left 500ms, top 500ms, transform 500ms";
+            myBullet.style.left = "800px";
+            myBullet.style.top = "-60px";
+            myBullet.style.transform = "rotate(120deg)";
+            setTimeout(() => {
+                myBullet.style.zIndex = "1000";
+                myBullet.style.transition =  "left 500ms, top 500ms, transform 500ms";
+                myBullet.style.left = `${squarePosX}px`;
+                myBullet.style.top = `${squarePosY}px`;
+                myBullet.style.transform = "rotate(150deg)";
+            }, 500);
+            
 
             playersTurnArrow.style.transform = "rotate(90deg)";
 
@@ -898,6 +919,7 @@ function enemyAttack() {
     do {
         enemyShotPosCycle = false;
         enemyShotPos = Math.floor(Math.random() * 100);
+        // enemyShotPos = 64;
         shotSideOffset = [-10, -1, 1, 10];
 
         if (mySquaresCanBeHit[enemyShotPos] === true) {
@@ -974,6 +996,10 @@ function enemyAttack() {
     if (myAreaIndex[enemyShotPos] == 0) {
         mySquares[enemyShotPos].style.backgroundImage =
             "url(./res/img/water.png)";
+
+        if (secondHit === true) {
+            saveShotSide = 3 - saveShotSide;
+        }
     }
     //ship
     else if (myAreaIndex[enemyShotPos] == 1) {
@@ -1129,3 +1155,10 @@ function enemyAttack() {
     }
     playerTurn = 0;
 }
+
+
+// left: 1290px;
+// top: 450px;
+
+// left: 1128px;
+// top: 337px;

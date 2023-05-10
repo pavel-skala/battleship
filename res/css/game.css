@@ -325,11 +325,38 @@ body {
     margin: 0;
     font-size: 40px;
 }
-#game h2:first-of-type {
-    left: 350px;
+
+#myCannon, #enemyCannon {
+    height: 150px;
+    width: auto;
+    position: absolute;
+    top: 60px;
+    left: 330px;
+    z-index: 100;
 }
-#game h2:last-of-type {
-    left: 1180px;
+#enemyCannon {
+    left: 1220px;
+    transform: rotateY(180deg);
+}
+#myCannon img, #enemyCannon img{
+    height: 100%;
+}
+
+#myBullet, #enemyBullet {
+    position: absolute;
+    left: 440px;
+    top: 4px;
+    height: 195px;
+    transform: rotate(74deg);
+    z-index: 10;
+    transition-timing-function: linear !important;
+}
+#enemyBullet {
+    left: 1259px;
+    transform: rotate(286deg);
+}
+#myBullet img, #enemyBullet img {
+    height: 100%;
 }
 
 #myArea,
@@ -409,14 +436,14 @@ body {
 #nicknameSection {
     display: none;
 }
-#buildShip {
-    scale: 1;
-    top: 0;
-}
-/* #game {
+/* #buildShip {
     scale: 1;
     top: 0;
 } */
+#game {
+    scale: 1;
+    top: 0;
+}
 
 @keyframes saveShipButtonAnimation {
     0% {
