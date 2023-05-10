@@ -33,8 +33,10 @@ const myShips = document.getElementsByClassName("myShips");
 const myShipsBx = document.getElementsByClassName("myShipsBx");
 const enemyShips = document.getElementsByClassName("enemyShips");
 
-const myBullet = document.getElementById("myBullet")
-const enemyBullet = document.getElementById("enemyBullet")
+const myBullet = document.getElementById("myBullet");
+const enemyBullet = document.getElementById("enemyBullet");
+const myExplosion = document.getElementById("myExplosion");
+const enemyExplosion = document.getElementById("enemyExplosion");
 
 const keycodes = {
     //up
@@ -726,17 +728,38 @@ let squarePosY;
 
             squarePosX = 964 + enemySquareHit % 10 * 60;
             squarePosY = 140 + Math.floor(enemySquareHit / 10) * 60;
-            myBullet.style.transition =  "left 500ms, top 500ms, transform 500ms";
+
+            myBullet.style.transition = "left 500ms, top 500ms, transform 500ms";
             myBullet.style.left = "800px";
             myBullet.style.top = "-60px";
-            myBullet.style.transform = "rotate(120deg)";
+            myBullet.style.transform = "rotate(140deg)";
+
             setTimeout(() => {
                 myBullet.style.zIndex = "1000";
-                myBullet.style.transition =  "left 500ms, top 500ms, transform 500ms";
                 myBullet.style.left = `${squarePosX}px`;
                 myBullet.style.top = `${squarePosY}px`;
-                myBullet.style.transform = "rotate(150deg)";
+
+                myExplosion.style.left = `${squarePosX + 11}px`;
+                myExplosion.style.top = `${squarePosY + 67}px`;
+                myExplosion.style.zIndex = "1000";
+
+                setTimeout(() => {
+                    myExplosion.innerHTML = `<img src="./res/img/explosion.gif" draggable="false">`;
+                    setTimeout(() => {
+                        myBullet.style.transition = "";
+                        myBullet.style.left = "440px";
+                        myBullet.style.top = "4px";
+                        myBullet.style.transform = "rotate(74deg)";
+                        myBullet.style.zIndex = "1";
+                    }, 50);
+                    setTimeout(() => {
+                        myExplosion.innerHTML = "";
+                        myExplosion.style.zIndex = "-1";
+                    }, 1400);
+                }, 500);
             }, 500);
+            
+            
             
 
             playersTurnArrow.style.transform = "rotate(90deg)";
@@ -912,6 +935,9 @@ let saveShotPositionY;
 let saveShotSide;
 let secondHit;
 
+let mySquarePosX;
+let mySquarePosY;
+
 //enemy attack
 function enemyAttack() {
     let enemyShotPos;
@@ -989,6 +1015,38 @@ function enemyAttack() {
             }
         } else console.log("znova");
     } while (!enemyShotPosCycle);
+
+    mySquarePosX = 246 + enemyShotPos % 10 * 60;
+    mySquarePosY = 137 + Math.floor(enemyShotPos / 10) * 60;
+
+    enemyBullet.style.transition = "left 500ms, top 500ms, transform 500ms";
+    enemyBullet.style.left = "800px";
+    enemyBullet.style.top = "-60px";
+    enemyBullet.style.transform = "rotate(220deg)";
+
+    setTimeout(() => {
+        enemyBullet.zIndex = "1000";
+        enemyBullet.style.left = `${mySquarePosX}px`;
+        enemyBullet.style.top = `${mySquarePosY}px`;
+
+        enemyExplosion.style.left = `${mySquarePosX - 70}px`;
+        enemyExplosion.style.top = `${mySquarePosY + 67}px`;
+        
+        setTimeout(() => {
+            enemyExplosion.innerHTML = `<img src="./res/img/explosion.gif" draggable="false">`;
+            
+            setTimeout(() => {
+                enemyBullet.style.transition = "";
+                enemyBullet.style.left = "1259px";
+                enemyBullet.style.top = "4px";
+                enemyBullet.style.transform = "rotate(286deg)";
+                enemyBullet.style.zIndex = "1";
+            }, 50);
+            setTimeout(() => {
+                enemyExplosion.innerHTML = "";
+            }, 1400);
+        }, 500);
+    }, 500);
 
     playersTurnArrow.style.transform = "rotate(270deg)";
     mySquaresCanBeHit[enemyShotPos] = false;
@@ -1155,10 +1213,3 @@ function enemyAttack() {
     }
     playerTurn = 0;
 }
-
-
-// left: 1290px;
-// top: 450px;
-
-// left: 1128px;
-// top: 337px;
