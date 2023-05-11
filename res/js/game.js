@@ -716,6 +716,7 @@ for (let i = 0; i < 5; i++) {
 let squarePosX;
 let squarePosY;
 
+
 [...enemySquares].forEach((enemySquare, enemySquareHit) => {
     enemySquare.addEventListener("click", myAttack);
 
@@ -733,18 +734,27 @@ let squarePosY;
             myBullet.style.left = "800px";
             myBullet.style.top = "-60px";
             myBullet.style.transform = "rotate(140deg)";
+            let gifLength;
 
             setTimeout(() => {
                 myBullet.style.zIndex = "1000";
                 myBullet.style.left = `${squarePosX}px`;
                 myBullet.style.top = `${squarePosY}px`;
 
+                myExplosion.style.zIndex = "1000";
                 myExplosion.style.left = `${squarePosX + 11}px`;
                 myExplosion.style.top = `${squarePosY + 67}px`;
-                myExplosion.style.zIndex = "1000";
 
                 setTimeout(() => {
-                    myExplosion.innerHTML = `<img src="./res/img/explosion.gif" draggable="false">`;
+                    if (enemyAreaIndex[enemySquareHit] == 0) {
+                        myExplosion.innerHTML = `<img src="./res/img/splash.gif" draggable="false">`;
+                        gifLength = 1200;
+                    }
+                    else {
+                        myExplosion.innerHTML = `<img src="./res/img/explosion.gif" draggable="false">`;
+                        gifLength = 1400;
+                    }  
+
                     setTimeout(() => {
                         myBullet.style.transition = "";
                         myBullet.style.left = "440px";
@@ -755,15 +765,19 @@ let squarePosY;
                     setTimeout(() => {
                         myExplosion.innerHTML = "";
                         myExplosion.style.zIndex = "-1";
-                    }, 1400);
+                    }, gifLength);
                 }, 500);
             }, 500);
             
-            
-            
 
-            playersTurnArrow.style.transform = "rotate(90deg)";
+            setTimeout(() => {
+                playersTurnArrow.style.transform = "rotate(90deg)";
+                
+            }, 400);
 
+            setTimeout(() => {
+                
+            
             if (enemyAreaIndex[enemySquareHit] == 1) {
                 enemySquares[enemySquareHit].style.backgroundImage =
                     "url(./res/img/fire.png)";
@@ -923,6 +937,8 @@ let squarePosY;
             setTimeout(() => {
                 enemyAttack();
             }, 300);
+
+        }, 1800);
         }
     }
 });
@@ -1023,6 +1039,7 @@ function enemyAttack() {
     enemyBullet.style.left = "800px";
     enemyBullet.style.top = "-60px";
     enemyBullet.style.transform = "rotate(220deg)";
+    let gifLength;
 
     setTimeout(() => {
         enemyBullet.zIndex = "1000";
@@ -1033,7 +1050,14 @@ function enemyAttack() {
         enemyExplosion.style.top = `${mySquarePosY + 67}px`;
         
         setTimeout(() => {
-            enemyExplosion.innerHTML = `<img src="./res/img/explosion.gif" draggable="false">`;
+            if (myAreaIndex[enemyShotPos] == 0) {
+                enemyExplosion.innerHTML = `<img src="./res/img/splash.gif" draggable="false">`;
+                gifLength = 1200;
+            }
+            else {
+                enemyExplosion.innerHTML = `<img src="./res/img/explosion.gif" draggable="false">`;
+                gifLength = 1400;
+            }   
             
             setTimeout(() => {
                 enemyBullet.style.transition = "";
@@ -1044,12 +1068,17 @@ function enemyAttack() {
             }, 50);
             setTimeout(() => {
                 enemyExplosion.innerHTML = "";
-            }, 1400);
+            }, gifLength);
         }, 500);
     }, 500);
 
-    playersTurnArrow.style.transform = "rotate(270deg)";
-    mySquaresCanBeHit[enemyShotPos] = false;
+    setTimeout(() => {
+        
+        playersTurnArrow.style.transform = "rotate(270deg)";
+    }, 400);
+    setTimeout(() => {
+        mySquaresCanBeHit[enemyShotPos] = false;
+    
     //water
     if (myAreaIndex[enemyShotPos] == 0) {
         mySquares[enemyShotPos].style.backgroundImage =
@@ -1097,7 +1126,7 @@ function enemyAttack() {
 
         //ship sunk
         if (shipSunk === true) {
-            myShips[shipHitted].style.filter = "brightness(35%)";
+            // myShips[shipHitted].style.filter = "brightness(35%)";
             shipFire = false;
             secondHit = false;
 
@@ -1210,6 +1239,8 @@ function enemyAttack() {
             saveShotPositionX = saveShotPosition % 10;
             saveShotPositionY = Math.floor(saveShotPosition / 10);
         }
+        
     }
     playerTurn = 0;
+    }, 1800);
 }
