@@ -432,7 +432,7 @@ body {
 
 .enemyShips {
     display: none;
-    position: relative;
+    /* position: relative; */
     /* filter: brightness(35%); */
 }
 .enemyShips::before{
@@ -454,17 +454,17 @@ body {
     top: 90px;
 } */
 
-#nicknameSection {
+/* #nicknameSection {
     display: none;
-}
+} */
 /* #buildShip {
     scale: 1;
     top: 0;
 } */
-#game {
+/* #game {
     scale: 1;
     top: 0;
-}
+} */
 
 @keyframes saveShipButtonAnimation {
     0% {
