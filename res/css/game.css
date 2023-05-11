@@ -433,9 +433,9 @@ body {
 .enemyShips {
     display: none;
     /* position: relative; */
-    /* filter: brightness(35%); */
+    filter: brightness(35%);
 }
-.enemyShips::before{
+/* .enemyShips::before{
     content: '';
     position: absolute;
     left: 0;
@@ -444,7 +444,7 @@ body {
     height: 100%;
     background-color: #00000091;
     z-index: 9;
-}
+} */
 /* .enemyShipsImg {
     transform: rotate(90deg);
     width: 240px;
@@ -454,17 +454,34 @@ body {
     top: 90px;
 } */
 
+#endSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-color: black;
+    z-index: 1000;
+
+    display: none;
+}
+
+
+
 /* #nicknameSection {
     display: none;
 } */
-/* #buildShip {
-    scale: 1;
-    top: 0;
-} */
-/* #game {
-    scale: 1;
-    top: 0;
-} */
+#buildShip {
+    /* scale: 1;
+    top: 0; */
+    display: none;
+}
+#game {
+    /* scale: 1;
+    top: 0; */
+    display: none;
+}
 
 @keyframes saveShipButtonAnimation {
     0% {
