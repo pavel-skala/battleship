@@ -38,6 +38,13 @@ const enemyBullet = document.getElementById("enemyBullet");
 const myExplosion = document.getElementById("myExplosion");
 const enemyExplosion = document.getElementById("enemyExplosion");
 
+const endSection = document.getElementById("endSection");
+const winnerInfo = document.getElementById("winnerInfo");
+const scorePlayerName = document.getElementById("scorePlayerName");
+const myScore = document.getElementById("myScore");
+const enemyScore = document.getElementById("enemyScore");
+const playAgainButton = document.getElementById("playAgainButton");
+
 const keycodes = {
     //up
     UP: { 38: 1 },
@@ -84,6 +91,8 @@ let enemyAreaIndex = [];
 let enemySquareClicked = [];
 
 let mySquaresCanBeHit = [];
+
+let totalScore = [0, 0];
 
 for (let i = 0; i < 100; i++) {
     shipSquareIndex[i] = false;
@@ -133,6 +142,8 @@ submitNicknameBtn.onclick = () => {
     userNickname = enterNickname.value;
     if (userNickname.length > 2) {
         buildShip.style.display = "flex";
+
+        localStorage.setItem("userNickname", userNickname);
         setTimeout(() => {
             buildShip.style.scale = "1";
             buildShip.style.top = "0";
@@ -544,6 +555,8 @@ let enemyWaterAround = [];
 let playerTurn = 0;
 let mySunkCount = 0;
 
+
+
 //placing enemyShips
 for (let i = 0; i < 5; i++) {
     enemyShipRotate[i] = Math.floor(Math.random() * 2);
@@ -722,7 +735,7 @@ for (let i = 0; i < 5; i++) {
 
 let squarePosX;
 let squarePosY;
-
+console.log(enemyAreaIndex);
 [...enemySquares].forEach((enemySquare, enemySquareHit) => {
     enemySquare.addEventListener("click", myAttack);
 
@@ -755,6 +768,7 @@ let squarePosY;
                     if (enemyAreaIndex[enemySquareHit] == 0) {
                         myExplosion.innerHTML = `<img src="./res/img/splash.gif" draggable="false">`;
                         gifLength = 1200;
+                        console.log("ahooooj");
                     } else {
                         myExplosion.innerHTML = `<img src="./res/img/explosion.gif" draggable="false">`;
                         gifLength = 1400;
@@ -768,6 +782,7 @@ let squarePosY;
                         myBullet.style.zIndex = "1";
                     }, 50);
                     setTimeout(() => {
+                        console.log("hovnooooo");
                         myExplosion.innerHTML = "";
                         myExplosion.style.zIndex = "-1";
                     }, gifLength);
@@ -943,16 +958,27 @@ let squarePosY;
                     enemySquares[enemySquareHit].style.backgroundImage =
                         "url(./res/img/water.png)";
                 }
-
-                //enemy shot
-                setTimeout(() => {
-                    enemyAttack();
-                }, 300);
+                if (mySunkCount == 5) {
+                    totalScore[0]++;
+                    localStorage.setItem("totalScore", totalScore);
+                    endSection.style.display = "flex";
+                    winnerInfo.innerText = `${userNickname} Won`;
+                    scorePlayerName.innerText = `${userNickname}`;
+                    myScore.innerText = `${totalScore[0]}`;
+                    enemyScore.innerText = `${totalScore[1]}`;
+                } else {
+                    //enemy shot
+                    setTimeout(() => {
+                        enemyAttack();
+                    }, 300);
+                }
             }, 1800);
         }
     }
 });
-
+playAgainButton.onclick = () => {
+    console.log(localStorage.getItem("totalScore"));
+}
 let shipFire = false;
 let shotSideOffset;
 let saveShotPosition;
@@ -1269,6 +1295,15 @@ function enemyAttack() {
                 saveShotPosition = enemyShotPos;
                 saveShotPositionX = saveShotPosition % 10;
                 saveShotPositionY = Math.floor(saveShotPosition / 10);
+            }
+
+            if (enemySunkCount == 5) {
+                totalScore[1]++;
+                endSection.style.display = "flex";
+                winnerInfo.innerText = `Computer Won`;
+                scorePlayerName.innerText = `${userNickname}`;
+                myScore.innerText = `${totalScore[0]}`;
+                enemyScore.innerText = `${totalScore[1]}`;
             }
         }
         playerTurn = 0;

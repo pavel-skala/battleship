@@ -397,11 +397,26 @@
 
         <!-- end game section -->
         <section id="endSection">
-            <h1 id="winnerInfo">Player won</h1>
-            <div id="scoreInfo"></div>
-            <div id="endbuttonBx">
-                <a href="./index.html" id="mainMenu"></a>
-                <button id="playAgain"></button>
+            <div id="endArea">
+                <h1 id="winnerInfo">Player Won</h1>
+                <div id="scoreBoard">
+                    <div id="myScoreColumn">
+                        <div id="scorePlayerName">Player</div>
+                        <div id="myScore">0</div>
+                    </div>
+                    <div id="scoreColon">
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div id="enemyScoreColumn">
+                        <div>Computer</div>
+                        <div id="enemyScore">0</div>
+                    </div>
+                </div>
+                <div id="endButtonBx">
+                    <a href="./index.html" id="mainMenuButton">Main Menu</a>
+                    <button id="playAgainButton">Play Again</button>
+                </div>
             </div>
         </section>
         <script src="./res/js/game.js"></script>
