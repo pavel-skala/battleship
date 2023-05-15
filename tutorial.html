@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Battleship</title>
+        <link rel="stylesheet" href="./res/css/tutorial.css" />
+    </head>
+    <body>
+        <!-- background -->
+        <div id="bg">
+            <img id="bgImg" src="./res/img/background.jpg" alt="" />
+            <div id="bgBx"></div>
+        </div>
+
+        <section id="tutorialSection">
+            <div id="imageArea">
+                <div class="description">
+                    Enter your nickname<br />Must be between 3 and 10 characters
+                    long
+                </div>
+                <div class="description">Click the ship you want to place</div>
+                <div class="description">
+                    Place your ship using the arrow on the screen or use the
+                    arrow keys on the keyboard
+                </div>
+                <div class="description">
+                    Click on an opponent's square to shoot
+                </div>
+            </div>
+            <div id="arrowBx">
+                <img
+                    src="./res/img/arrow.png"
+                    alt=""
+                    id="arrowLeft"
+                    draggable="false"
+                />
+                <img
+                    src="./res/img/arrow.png"
+                    alt=""
+                    id="arrowRight"
+                    draggable="false"
+                />
+            </div>
+        </section>
+
+        <script src="./res/js/tutorial.js"></script>
+    </body>
+</html>

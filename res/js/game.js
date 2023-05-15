@@ -137,10 +137,33 @@ for (let i = 0; i < shipLenght.length; i++) {
     }
 }
 
+window.onload = () => {
+    console.log("load");
+    userNickname = localStorage.getItem("userNickname");
+    if (parseInt(localStorage.getItem("myScore")) > 0) {
+        totalScore[0] = parseInt(localStorage.getItem("myScore"));
+    }
+    if (parseInt(localStorage.getItem("enemyScore")) > 0) {
+        totalScore[1] = parseInt(localStorage.getItem("enemyScore"));
+    }
+
+    if (userNickname === undefined || userNickname === null) {
+        nicknameSection.style.display = "flex";
+    } else {
+        nicknameSection.style.display = "none";
+        buildShip.style.display = "flex";
+        buildShip.style.scale = "1";
+        buildShip.style.top = "0";
+    }
+};
+
 //nickname section
 submitNicknameBtn.onclick = () => {
     userNickname = enterNickname.value;
-    if (userNickname.length > 2) {
+    if (userNickname.length > 10) {
+        nicknameCondition.innerHTML = "Maximum 10 characters";
+        enterNickname.style.marginTop = "0";
+    } else if (userNickname.length > 2) {
         buildShip.style.display = "flex";
 
         localStorage.setItem("userNickname", userNickname);
@@ -555,8 +578,6 @@ let enemyWaterAround = [];
 let playerTurn = 0;
 let mySunkCount = 0;
 
-
-
 //placing enemyShips
 for (let i = 0; i < 5; i++) {
     enemyShipRotate[i] = Math.floor(Math.random() * 2);
@@ -594,7 +615,6 @@ for (let i = 0; i < 5; i++) {
                     j += 10
                 ) {
                     enemySquareFree[j] = false;
-                    // enemySquares[j].style.backgroundColor = "blue";
                 }
                 if (enemyShipPositionX[i] == 0) {
                     savePosition = enemyShipPosition[i] - 10;
@@ -702,7 +722,7 @@ for (let i = 0; i < 5; i++) {
                 enemyShipPlaceCycle = true;
             }
         } while (!enemyShipPlaceCycle);
-        //save enemy position
+
         savePosition = enemyShipPosition[i];
 
         for (let j = 0; j < shipLenght[i]; j++) {
@@ -768,7 +788,6 @@ console.log(enemyAreaIndex);
                     if (enemyAreaIndex[enemySquareHit] == 0) {
                         myExplosion.innerHTML = `<img src="./res/img/splash.gif" draggable="false">`;
                         gifLength = 1200;
-                        console.log("ahooooj");
                     } else {
                         myExplosion.innerHTML = `<img src="./res/img/explosion.gif" draggable="false">`;
                         gifLength = 1400;
@@ -782,7 +801,6 @@ console.log(enemyAreaIndex);
                         myBullet.style.zIndex = "1";
                     }, 50);
                     setTimeout(() => {
-                        console.log("hovnooooo");
                         myExplosion.innerHTML = "";
                         myExplosion.style.zIndex = "-1";
                     }, gifLength);
@@ -960,7 +978,8 @@ console.log(enemyAreaIndex);
                 }
                 if (mySunkCount == 5) {
                     totalScore[0]++;
-                    localStorage.setItem("totalScore", totalScore);
+                    localStorage.setItem("myScore", totalScore[0]);
+                    localStorage.setItem("enemyScore", totalScore[1]);
                     endSection.style.display = "flex";
                     winnerInfo.innerText = `${userNickname} Won`;
                     scorePlayerName.innerText = `${userNickname}`;
@@ -976,9 +995,7 @@ console.log(enemyAreaIndex);
         }
     }
 });
-playAgainButton.onclick = () => {
-    console.log(localStorage.getItem("totalScore"));
-}
+
 let shipFire = false;
 let shotSideOffset;
 let saveShotPosition;
@@ -999,7 +1016,6 @@ function enemyAttack() {
     do {
         enemyShotPosCycle = false;
         enemyShotPos = Math.floor(Math.random() * 100);
-        // enemyShotPos = 64;
         shotSideOffset = [-10, -1, 1, 10];
 
         if (mySquaresCanBeHit[enemyShotPos] === true) {
@@ -1030,34 +1046,35 @@ function enemyAttack() {
                 }
 
                 if (secondHit === true) {
-                    console.log("second hit");
                     let randomSideCycle;
-                    let num = 1;
+                    let num = 0;
+                    let side = 0;
                     do {
                         randomSideCycle = false;
 
-                        enemyShotPos =
-                            saveShotPosition +
-                            shotSideOffset[saveShotSide] * num;
-
-                        if (
-                            shotSideOffset[saveShotSide] != undefined &&
-                            mySquaresCanBeHit[enemyShotPos] === true
-                        ) {
-                            randomSideCycle = true;
+                        if (side == 0) {
+                            num++;
+                            enemyShotPos =
+                                saveShotPosition +
+                                shotSideOffset[saveShotSide] * num;
+                            if (
+                                shotSideOffset[saveShotSide] != undefined &&
+                                mySquaresCanBeHit[enemyShotPos] === true
+                            ) {
+                                randomSideCycle = true;
+                            } else side = 1;
                         } else {
                             enemyShotPos =
                                 saveShotPosition +
                                 shotSideOffset[3 - saveShotSide] * num;
 
                             if (
-                                shotSideOffset[saveShotSide] != undefined &&
+                                shotSideOffset[3 - saveShotSide] != undefined &&
                                 mySquaresCanBeHit[enemyShotPos] === true
                             ) {
                                 randomSideCycle = true;
-                            }
+                            } else side = 0;
                         }
-                        num++;
                     } while (!randomSideCycle);
                     enemyShotPosCycle = true;
                     break;
@@ -1067,14 +1084,13 @@ function enemyAttack() {
                     shotSideOffset[randomSide] != undefined &&
                     mySquaresCanBeHit[enemyShotPos] === true
                 ) {
-                    console.log("save");
                     saveShotSide = randomSide;
                     enemyShotPosCycle = true;
                 }
             } else {
                 enemyShotPosCycle = true;
             }
-        } else console.log("znova");
+        }
     } while (!enemyShotPosCycle);
 
     mySquarePosX = 246 + (enemyShotPos % 10) * 60;
@@ -1087,7 +1103,6 @@ function enemyAttack() {
     let gifLength;
 
     setTimeout(() => {
-        enemyBullet.zIndex = "1000";
         enemyBullet.style.left = `${mySquarePosX}px`;
         enemyBullet.style.top = `${mySquarePosY}px`;
 
@@ -1108,7 +1123,6 @@ function enemyAttack() {
                 enemyBullet.style.left = "1259px";
                 enemyBullet.style.top = "4px";
                 enemyBullet.style.transform = "rotate(286deg)";
-                enemyBullet.style.zIndex = "1";
             }, 50);
             setTimeout(() => {
                 enemyExplosion.innerHTML = "";
@@ -1144,6 +1158,12 @@ function enemyAttack() {
                         break;
                     }
                 }
+            }
+
+            if (secondHit != true) {
+                saveShotPosition = enemyShotPos;
+                saveShotPositionX = saveShotPosition % 10;
+                saveShotPositionY = Math.floor(saveShotPosition / 10);
             }
             if (shipFire === true) {
                 secondHit = true;
@@ -1291,14 +1311,12 @@ function enemyAttack() {
                 }
             } else {
                 shipFire = true;
-
-                saveShotPosition = enemyShotPos;
-                saveShotPositionX = saveShotPosition % 10;
-                saveShotPositionY = Math.floor(saveShotPosition / 10);
             }
 
             if (enemySunkCount == 5) {
                 totalScore[1]++;
+                localStorage.setItem("myScore", totalScore[0]);
+                localStorage.setItem("enemyScore", totalScore[1]);
                 endSection.style.display = "flex";
                 winnerInfo.innerText = `Computer Won`;
                 scorePlayerName.innerText = `${userNickname}`;
@@ -1309,3 +1327,9 @@ function enemyAttack() {
         playerTurn = 0;
     }, 1800);
 }
+
+playAgainButton.onclick = () => {
+    console.log(localStorage.getItem("totalScore"));
+
+    location.reload();
+};

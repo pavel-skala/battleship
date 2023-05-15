@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
+* {
+    box-sizing: border-box;
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    user-select: none;
+}
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+/* background */
+#bg {
+    position: absolute;
+    z-index: -1;
+}
+#bgImg {
+    width: 120%;
+}
+#bgBx {
+    background: linear-gradient(0deg, black, #5454541c, #1e1e1e);
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#tutorialSection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#imageArea {
+    width: 1200px;
+    height: 600px;
+    background-color: black;
+    border-radius: 10px;
+    display: flex;
+    background-image: url(../img/tutorial0.png);
+    background-size: cover;
+}
+
+.image {
+    width: 1200px;
+    border-radius: 10px;
+    /* position: relative; */
+    left: 100%;
+    top: 0;
+}
+.image:first-child {
+    left: 0;
+}
+
+#arrowBx {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+#arrowLeft,
+#arrowRight {
+    transform: rotate(-90deg);
+    cursor: pointer;
+}
+#arrowRight {
+    transform: rotate(90deg);
+}
+
+.description {
+    position: absolute;
+    background-color: white;
+    color: black;
+    padding: 13px;
+    font-size: 22px;
+    border-radius: 10px;
+    display: none;
+}
+.description:first-child {
+    left: 40px;
+    top: 160px;
+    display: block;
+}
+.description:nth-child(2) {
+    top: 10px;
+    left: 80px;
+}
+.description:nth-child(3) {
+    top: 10px;
+    left: 150px;
+}
+.description:nth-child(4) {
+    top: 40px;
+    left: 715px;
+}
