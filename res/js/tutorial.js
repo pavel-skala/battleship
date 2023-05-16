@@ -11,7 +11,7 @@ arrowRight.onclick = () => {
     if (currentImage > 3) {
         window.location.href = "./index.html";
     } else {
-        imageArea.style.backgroundImage = `url(../res/img/tutorial${currentImage}.png)`;
+        imageArea.style.backgroundImage = `url(./res/img/tutorial${currentImage}.png)`;
         description[currentImage].style.display = "block";
         description[currentImage - 1].style.display = "none";
     }
@@ -22,7 +22,7 @@ arrowLeft.onclick = () => {
     if (currentImage < 0) {
         window.location.href = "./index.html";
     } else {
-        imageArea.style.backgroundImage = `url(../res/img/tutorial${currentImage}.png)`;
+        imageArea.style.backgroundImage = `url(./res/img/tutorial${currentImage}.png)`;
         description[currentImage].style.display = "block";
         description[currentImage + 1].style.display = "none";
     }
